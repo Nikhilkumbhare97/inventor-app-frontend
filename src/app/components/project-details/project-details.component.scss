@@ -1,0 +1,48 @@
+:root {
+    --primary-bg: #9CA2C4;
+    --secondary-bg: #7F8BB0;
+    --accent-bg: #62749B;
+    --highlight-bg: #435585;
+    --base-font-size: 16px;
+}
+
+body {
+    font-size: var(--base-font-size);
+    background-color: var(--primary-bg);
+}
+
+.section {
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background-color: var(--secondary-bg);
+}
+
+.box-outline {
+    border: 1px solid var(--highlight-bg);
+    margin: 1rem;
+    border-radius: 0.5rem;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10rem;
+}
+
+mat-form-field {
+    flex: 1;
+    min-width: 200px;
+    max-width: 632px;
+    background-color: var(--accent-bg);
+    border-radius: 0.5rem;
+}
+
+.button-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+button {
+    margin-left: 10px;
+}

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -6,17 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  menuOpen = false;
-  userMenuOpen = false;
   activeTab = 'users';
 
-  toggleMenu() {
-    this.menuOpen = !this.menuOpen;
-  }
-
-  toggleUserMenu() {
-    this.userMenuOpen = !this.userMenuOpen;
-  }
+  constructor(private router: Router) { };
 
   setActiveTab(tab: string) {
     this.activeTab = tab;

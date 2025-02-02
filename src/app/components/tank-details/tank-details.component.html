@@ -1,0 +1,77 @@
+<form [formGroup]="tankDetailsForm">
+    <mat-card class="section box-outline" *ngIf="tankSection">
+        <h2>Tank details</h2>
+        <div class="form-row">
+            <mat-form-field appearance="outline">
+                <mat-label>Tank type</mat-label>
+                <mat-select id="tankType" formControlName="tankType">
+                    <mat-option value="Type1">LV cable RH side</mat-option>
+                    <mat-option value="Type2">LV cable LH side</mat-option>
+                    <mat-option value="Type3">No LV cable box</mat-option>
+                </mat-select>
+                <mat-error *ngIf="tankDetailsForm.get('tankType')?.hasError('required')">
+                    Tank type is required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Jacking Pad</mat-label>
+                <mat-select id="jackingPad" formControlName="jackingPad">
+                    <mat-option value="Type1">Type1</mat-option>
+                    <mat-option value="Type2">Type2</mat-option>
+                </mat-select>
+                <mat-error *ngIf="tankDetailsForm.get('jackingPad')?.hasError('required')">
+                    Jacking Pad is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="form-row">
+            <mat-form-field appearance="outline">
+                <mat-label>Centre Shifter</mat-label>
+                <mat-select id="centreShifter" formControlName="centreShifter">
+                    <mat-option value="Yes">Yes</mat-option>
+                    <mat-option value="No">No</mat-option>
+                </mat-select>
+                <mat-error *ngIf="tankDetailsForm.get('centreShifter')?.hasError('required')">
+                    Centre Shifter is required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Tank Material</mat-label>
+                <mat-select id="tankMaterial" formControlName="tankMaterial">
+                    <mat-option value="MS & Steel">MS & Steel</mat-option>
+                    <mat-option value="Copper">Copper</mat-option>
+                </mat-select>
+                <mat-error *ngIf="tankDetailsForm.get('tankMaterial')?.hasError('required')">
+                    Tank Material is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="button-row">
+            <button mat-raised-button color="primary" (click)="onTankDetailsFormSubmit()"
+                [disabled]="!tankDetailsForm.valid || topCoverVisible">Save</button>
+        </div>
+    </mat-card>
+
+    <div class="tank-part" *ngIf="tankDetailsForm.get('tankType')?.value">
+        <!-- <svg width="1000" height="700" xmlns="http://www.w3.org/2000/svg">
+            <image href="../../../assets/tank-details/tank-detail-type1-part1.jpg" x="0" y="0" width="1000"
+                height="700" />
+            <foreignObject x="360" y="30" width="5rem" height="50">
+
+                <body xmlns="http://www.w3.org/1999/xhtml">
+                    <input type="text" formControlName="d1" placeholder="" style="width:4.5rem;" />
+                </body>
+            </foreignObject>
+            <foreignObject x="525" y="30" width="5rem" height="50">
+
+                <body xmlns="http://www.w3.org/1999/xhtml">
+                    <input type="text" formControlName="d2" placeholder="" style="width:4.5rem;" />
+                </body>
+            </foreignObject>
+        </svg> -->
+
+        <object #svgContainer type="image/svg+xml" data="assets/tank-details/generated-tank-details-2.svg" width="1000"
+            height="700"></object>
+        <button type="submit" (click)="onSubmit()">Submit</button>
+    </div>
+</form>

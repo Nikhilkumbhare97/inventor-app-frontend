@@ -1,0 +1,43 @@
+<form [formGroup]="topCoverDetailsForm" (ngSubmit)="onTopCoverDetailsFormSubmit()">
+    <mat-card class="section box-outline" *ngIf="topCoverVisible">
+        <h2>Top Cover Details</h2>
+        <div class="form-row">
+            <mat-form-field appearance="outline">
+                <mat-label>Top Cover Type</mat-label>
+                <mat-select id="topCoverType" formControlName="topCoverType">
+                    <mat-option value="Type1">Type1</mat-option>
+                    <mat-option value="Type2">Type2</mat-option>
+                </mat-select>
+                <mat-error *ngIf="topCoverDetailsForm.get('topCoverType')?.hasError('required')">
+                    Top Cover Type is required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Big Pipe</mat-label>
+                <mat-select id="bigPipe" formControlName="bigPipe">
+                    <mat-option value="Yes">Yes</mat-option>
+                    <mat-option value="No">No</mat-option>
+                </mat-select>
+                <mat-error *ngIf="topCoverDetailsForm.get('bigPipe')?.hasError('required')">
+                    Big Pipe is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="form-row">
+            <mat-form-field appearance="outline">
+                <mat-label>Job Locking</mat-label>
+                <mat-select id="jobLocking" formControlName="jobLocking">
+                    <mat-option value="2">2</mat-option>
+                    <mat-option value="3">3</mat-option>
+                </mat-select>
+                <mat-error *ngIf="topCoverDetailsForm.get('jobLocking')?.hasError('required')">
+                    Job Locking is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="button-row">
+            <button mat-raised-button color="primary" type="submit"
+                [disabled]="!topCoverDetailsForm.valid">Save</button>
+        </div>
+    </mat-card>
+</form>

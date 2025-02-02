@@ -1,0 +1,143 @@
+:root {
+    --primary-bg: #9CA2C4;
+    --secondary-bg: #7F8BB0;
+    --accent-bg: #62749B;
+    --highlight-bg: #435585;
+    --base-font-size: 16px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--primary-bg);
+    font-size: 1rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #435585;
+    color: white;
+    padding: 0.625rem;
+}
+
+.hamburger-menu,
+.close-menu {
+    cursor: pointer;
+    font-size: 1.875rem;
+    margin-right: 1.25rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+}
+
+.user-icon {
+    font-size: 1.5rem;
+    margin-right: 0.3125rem;
+}
+
+.username {
+    margin-right: 0.625rem;
+}
+
+.user-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--primary-bg);
+    color: black;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.user-menu p {
+    margin: 0;
+    padding: 0.625rem;
+    border-bottom: 0.0625rem solid #ddd;
+}
+
+.user-menu button {
+    border: none;
+    background: none;
+    padding: 0.625rem;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.user-menu button:hover {
+    background: #eee;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 2.5rem;
+    height: auto;
+}
+
+.logo-text {
+    margin-left: 0.625rem;
+    font-size: 1.875rem;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.side-drawer {
+    position: fixed;
+    top: 0;
+    left: -15.625rem;
+    width: 15.625rem;
+    height: 100%;
+    background-color: #435585;
+    color: white;
+    transition: left 0.3s ease;
+    padding-top: 3.75rem;
+    z-index: 1000;
+}
+
+.side-drawer.open {
+    left: 0;
+}
+
+.side-drawer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.side-drawer li {
+    padding: 0.9375rem;
+    cursor: pointer;
+}
+
+.side-drawer li:hover {
+    background-color: #BCCCDC;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.overlay.open {
+    display: block;
+}

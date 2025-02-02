@@ -1,30 +1,4 @@
-<div class="header">
-    <div class="hamburger-menu" (click)="toggleMenu()" *ngIf="!menuOpen">&#9776;</div>
-    <div class="logo">Company Logo</div>
-    <div class="user-section" (click)="toggleUserMenu()">
-        <span class="user-icon">👤</span>
-        <span class="username">Username</span>
-        <div class="user-menu" *ngIf="userMenuOpen">
-            <p>Email: user@example.com</p>
-            <button>Change Password</button>
-            <button>Sign Out</button>
-        </div>
-    </div>
-</div>
-
-<div class="side-drawer" [class.open]="menuOpen">
-    <ul>
-        <li (click)="toggleMenu()">Projects</li>
-        <li (click)="toggleMenu()">Create Project</li>
-        <li (click)="toggleMenu()">Users</li>
-        <li (click)="toggleMenu()">Create User</li>
-        <li (click)="toggleMenu()">Help</li>
-    </ul>
-</div>
-
-<div class="overlay" *ngIf="menuOpen" (click)="toggleMenu()"></div>
-
 <div class="tabs">
-    <button (click)="setActiveTab('users')" [class.active]="activeTab === 'users'">Users</button>
-    <button (click)="setActiveTab('projects')" [class.active]="activeTab === 'projects'">Projects</button>
+    <button (click)="setActiveTab('users')" [class.active]="activeTab === 'users'">USERS</button>
+    <button (click)="setActiveTab('projects')" [class.active]="activeTab === 'projects'">PROJECTS</button>
 </div>

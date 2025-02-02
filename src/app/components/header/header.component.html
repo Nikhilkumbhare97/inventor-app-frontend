@@ -1,0 +1,32 @@
+<div class="header">
+    <div class="hamburger-menu" (click)="toggleMenu()">&#9776;</div>
+    <div class="logo-container" (click)="navigateHome()">
+        <div class="logo">
+            <img src="../../../assets/logos/Auto-Designer-logo.webp" alt="AutoDesigner Logo">
+        </div>
+        <div class="logo-text">
+            AUTO DESIGNER
+        </div>
+    </div>
+    <div class="user-section" (click)="toggleUserMenu()">
+        <span class="user-icon">👤</span>
+        <span class="username">USERNAME</span>
+        <div class="user-menu" *ngIf="userMenuOpen">
+            <p>Email: user@example.com</p>
+            <button>Change Password</button>
+            <button>Sign Out</button>
+        </div>
+    </div>
+</div>
+
+<div class="side-drawer" [class.open]="menuOpen">
+    <ul>
+        <li (click)="navigateTo('/projects')">PROJECTS</li>
+        <li (click)="navigateTo('/create-project')">CREATE PROJECT</li>
+        <li (click)="navigateTo('/users')">USERS</li>
+        <li (click)="navigateTo('/create-user')">CREATE USER</li>
+        <li (click)="navigateTo('/help')">HELP</li>
+    </ul>
+</div>
+
+<div class="overlay" *ngIf="menuOpen" (click)="toggleMenu()"></div>

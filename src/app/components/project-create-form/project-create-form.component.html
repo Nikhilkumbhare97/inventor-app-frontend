@@ -1,0 +1,38 @@
+<app-project-details (transformerSection)="showTransformerDetails($event)"></app-project-details>
+<form [formGroup]="transformerDetailsForm">
+    <mat-card class="section box-outline" *ngIf="transformerSection">
+        <h2>Transformer details</h2>
+        <div class="form-row">
+            <mat-form-field appearance="outline">
+                <mat-label>Type of transformer</mat-label>
+                <mat-select id="transformerType" formControlName="transformerType">
+                    <mat-option value="Type1">Type 1</mat-option>
+                    <mat-option value="Type2">Type 2</mat-option>
+                </mat-select>
+                <mat-error *ngIf="transformerDetailsForm.get('transformerType')?.hasError('required')">
+                    Type of transformer is required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Design type</mat-label>
+                <mat-select id="designType" formControlName="designType" (selectionChange)="onDesignTypeChange()">
+                    <mat-option value="Standard">Standard</mat-option>
+                    <mat-option value="Non-standard">Non-standard</mat-option>
+                </mat-select>
+                <mat-error *ngIf="transformerDetailsForm.get('designType')?.hasError('required')">
+                    Design type is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="button-row">
+            <button mat-raised-button color="primary"
+                *ngIf="transformerDetailsForm.get('designType')?.value === 'Standard'"
+                (click)="generate()">Generate</button>
+            <button mat-raised-button color="primary"
+                *ngIf="transformerDetailsForm.get('designType')?.value === 'Non-standard'"
+                (click)="ContinueTransformerDetails()" [disabled]="tankSection">Continue</button>
+        </div>
+    </mat-card>
+</form>
+<app-tank-details [tankSection]="tankSection" [topCoverVisible]="topCoverVisible" (tankDetailsformSubmit)="handleTankDetailsFormSubmit($event)"></app-tank-details>
+<app-top-cover-details [topCoverVisible]="topCoverVisible" (topCoverFormSubmit)="handleTopcoverDetailsFormSubmit($event)"></app-top-cover-details>

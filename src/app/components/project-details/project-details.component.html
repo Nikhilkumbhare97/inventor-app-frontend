@@ -1,0 +1,81 @@
+<form [formGroup]="projectDetailsForm" (ngSubmit)="onProjectFormSubmit()">
+    <mat-card class="section box-outline">
+        <h2>Project details</h2>
+        <div class="form-row">
+            <mat-form-field appearance="outline">
+                <mat-label>Project Name</mat-label>
+                <input matInput id="projectName" formControlName="projectName">
+                <mat-error *ngIf="projectDetailsForm.get('projectName')?.hasError('required')">
+                    Project Name is required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Project Number</mat-label>
+                <input matInput id="projectNumber" formControlName="projectNumber">
+                <mat-error *ngIf="projectDetailsForm.get('projectNumber')?.hasError('required')">
+                    Project Number is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="form-row">
+            <mat-form-field appearance="outline">
+                <mat-label>Project ID</mat-label>
+                <input matInput id="projectId" formControlName="projectId">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Client Name</mat-label>
+                <input matInput id="clientName" formControlName="clientName">
+                <mat-error *ngIf="projectDetailsForm.get('clientName')?.hasError('required')">
+                    Client Name is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="button-row">
+            <button mat-raised-button color="primary" (click)="nextSection()"
+                [disabled]="!projectDetailsFormSection1Valid">Next</button>
+        </div>
+    </mat-card>
+
+    <mat-card class="section box-outline" *ngIf="showSection2">
+        <h2>User details</h2>
+        <div class="form-row">
+            <mat-form-field appearance="outline">
+                <mat-label>Created by</mat-label>
+                <input matInput id="createdBy" formControlName="createdBy">
+                <mat-error *ngIf="projectDetailsForm.get('createdBy')?.hasError('required')">
+                    Created by is required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Prepared by</mat-label>
+                <input matInput id="preparedBy" formControlName="preparedBy">
+                <mat-error *ngIf="projectDetailsForm.get('preparedBy')?.hasError('required')">
+                    Prepared by is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="form-row">
+            <mat-form-field appearance="outline">
+                <mat-label>Checked by</mat-label>
+                <input matInput id="checkedBy" formControlName="checkedBy">
+                <mat-error *ngIf="projectDetailsForm.get('checkedBy')?.hasError('required')">
+                    Checked by is required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Date</mat-label>
+                <input matInput [matDatepicker]="picker" id="date" formControlName="date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="projectDetailsForm.get('date')?.hasError('required')">
+                    Date is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="button-row">
+            <button mat-raised-button color="primary" (click)="showTransformerDetails()"
+                [disabled]="!projectDetailsFormSection2Valid">Submit</button>
+        </div>
+    </mat-card>
+
+</form>

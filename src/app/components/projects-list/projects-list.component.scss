@@ -1,0 +1,26 @@
+.projects-list-container {
+    margin-top: 0.5rem;
+    padding: 16px;
+
+    table {
+        width: 100%;
+    }
+
+    th.mat-header-cell,
+    td.mat-cell {
+        text-align: left;
+    }
+
+    td.mat-cell {
+        vertical-align: middle;
+    }
+
+    td.mat-cell:last-child {
+        display: flex;
+        align-items: center;
+
+        button {
+            margin-right: 8px;
+        }
+    }
+}

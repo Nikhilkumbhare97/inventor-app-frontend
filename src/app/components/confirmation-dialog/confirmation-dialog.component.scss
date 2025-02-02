@@ -1,0 +1,57 @@
+:root {
+    --primary-bg: #9CA2C4;
+    --secondary-bg: #7F8BB0;
+    --accent-bg: #62749B;
+    --highlight-bg: #435585;
+    --base-font-size: 16px;
+    --primary-text: #ffffff;
+    --button-radius: 5px;
+}
+
+.mat-dialog-container {
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+    font-size: var(--base-font-size);
+    border-radius: 10px;
+}
+
+.mat-dialog-title {
+    background-color: var(--highlight-bg);
+    color: var(--primary-text);
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 1rem;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.mat-dialog-content {
+    padding: 1.5rem;
+    background-color: var(--secondary-bg);
+    color: var(--primary-text);
+    font-size: 1rem;
+    text-align: center;
+}
+
+.mat-dialog-actions {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--accent-bg);
+    padding: 1rem;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.mat-dialog-actions button {
+    background-color: var(--highlight-bg);
+    color: var(--primary-text);
+    border: none;
+    border-radius: var(--button-radius);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.mat-dialog-actions button:hover {
+    background-color: var(--accent-bg);
+}

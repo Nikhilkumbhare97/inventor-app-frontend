@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './components/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -17,6 +16,11 @@ import { MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular
 import { MY_DATE_FORMATS } from './date-formats';
 import { DatePipe } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+
+//components
+import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProjectCreateFormComponent } from './components/project-create-form/project-create-form.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -24,6 +28,9 @@ import { ProjectDetailsComponent } from './components/project-details/project-de
 import { TankDetailsComponent } from './components/tank-details/tank-details.component';
 import { TopCoverDetailsComponent } from './components/top-cover-details/top-cover-details.component';
 import { SvgImageGeneratorComponent } from './components/svg-image-generator/svg-image-generator.component';
+import { ProjectsListComponent } from './components/projects-list/projects-list.component';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { StatusDialogComponent } from './components/status-dialog/status-dialog.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +42,10 @@ import { SvgImageGeneratorComponent } from './components/svg-image-generator/svg
     ProjectDetailsComponent,
     TankDetailsComponent,
     TopCoverDetailsComponent,
-    SvgImageGeneratorComponent
+    SvgImageGeneratorComponent,
+    ProjectsListComponent,
+    ConfirmationDialogComponent,
+    StatusDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +59,9 @@ import { SvgImageGeneratorComponent } from './components/svg-image-generator/svg
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTableModule,
+    MatDialogModule
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },

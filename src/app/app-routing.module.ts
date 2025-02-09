@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'projects', component: ProjectsListComponent },
   { path: 'create-project', component: ProjectCreateFormComponent },
-  { path: 'edit-project/:id', component: ProjectCreateFormComponent },
+  { path: 'edit-project/:projectUniqueId', component: ProjectCreateFormComponent },
   { path: 'help', component: SvgImageGeneratorComponent }
 ];
 

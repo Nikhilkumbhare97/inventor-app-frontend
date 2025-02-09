@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-project-create-form',
@@ -14,11 +15,19 @@ export class ProjectCreateFormComponent implements OnInit {
   topCoverVisible = false;
   tankDetailsData: any;
   topCoverDetailsData: any;
+  isEditMode = false;
+  projectUniqueId: string | null = null;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
 
+    this.route.params.subscribe(params => {
+      if (params.projectUniqueId) {
+        this.isEditMode = true;
+        this.projectUniqueId = params.projectUniqueId;
+      }
+    });
     this.transformerDetailsForm = this.fb.group({
       transformerType: ['', Validators.required],
       designType: ['', Validators.required]
@@ -31,7 +40,6 @@ export class ProjectCreateFormComponent implements OnInit {
 
   generate(): void {
     // Placeholder for generate logic
-    console.log('Generate clicked');
   }
 
   ContinueTransformerDetails(): void {
@@ -45,7 +53,6 @@ export class ProjectCreateFormComponent implements OnInit {
   handleTankDetailsFormSubmit(formData: any): void {
     this.tankDetailsData = formData;
     this.topCoverVisible = true;
-    console.log('Received tank details form data:', formData);
   }
   handleTopcoverDetailsFormSubmit(formData: any): void {
     this.topCoverDetailsData = formData;

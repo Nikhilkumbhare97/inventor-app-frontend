@@ -1,7 +1,9 @@
 // project.model.ts
 export interface Project {
-    id: number;            // Project ID
+    projectUniqueId?: number;
+    projectId?: string;
     projectName: string;
     projectNumber: string;
     clientName: string;
+    status: string;
 }

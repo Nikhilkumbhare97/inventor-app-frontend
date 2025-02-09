@@ -1,4 +1,5 @@
-<app-project-details (transformerSection)="showTransformerDetails($event)"></app-project-details>
+<app-project-details [projectUniqueId]="projectUniqueId" [isEditMode]="isEditMode"
+    (transformerSection)="showTransformerDetails($event)"></app-project-details>
 <form [formGroup]="transformerDetailsForm">
     <mat-card class="section box-outline" *ngIf="transformerSection">
         <h2>Transformer details</h2>
@@ -34,5 +35,7 @@
         </div>
     </mat-card>
 </form>
-<app-tank-details [tankSection]="tankSection" [topCoverVisible]="topCoverVisible" (tankDetailsformSubmit)="handleTankDetailsFormSubmit($event)"></app-tank-details>
-<app-top-cover-details [topCoverVisible]="topCoverVisible" (topCoverFormSubmit)="handleTopcoverDetailsFormSubmit($event)"></app-top-cover-details>
+<app-tank-details [tankSection]="tankSection" [topCoverVisible]="topCoverVisible"
+    (tankDetailsformSubmit)="handleTankDetailsFormSubmit($event)"></app-tank-details>
+<app-top-cover-details [topCoverVisible]="topCoverVisible"
+    (topCoverFormSubmit)="handleTopcoverDetailsFormSubmit($event)"></app-top-cover-details>

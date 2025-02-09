@@ -1,4 +1,4 @@
-<form [formGroup]="projectDetailsForm" (ngSubmit)="onProjectFormSubmit()">
+<form [formGroup]="projectDetailsForm">
     <mat-card class="section box-outline">
         <h2>Project details</h2>
         <div class="form-row">
@@ -30,7 +30,7 @@
                 </mat-error>
             </mat-form-field>
         </div>
-        <div class="button-row">
+        <div *ngIf="!isEditMode" class="button-row">
             <button mat-raised-button color="primary" (click)="nextSection()"
                 [disabled]="!projectDetailsFormSection1Valid">Next</button>
         </div>
@@ -73,8 +73,10 @@
             </mat-form-field>
         </div>
         <div class="button-row">
-            <button mat-raised-button color="primary" (click)="showTransformerDetails()"
-                [disabled]="!projectDetailsFormSection2Valid">Submit</button>
+            <button mat-raised-button color="primary" (click)="onProjectFormSave()"
+                [disabled]="!projectDetailsFormSection2Valid">Save</button>
+            <button *ngIf="isEditMode" mat-raised-button color="primary" (click)="showTransformerDetails()"
+                [disabled]="!projectDetailsFormSection2Valid">Next</button>
         </div>
     </mat-card>
 

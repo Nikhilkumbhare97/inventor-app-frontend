@@ -48,30 +48,12 @@
         </div>
         <div class="button-row">
             <button mat-raised-button color="primary" (click)="onTankDetailsFormSubmit()"
-                [disabled]="!tankDetailsForm.valid || topCoverVisible">Save</button>
+                [disabled]="!tankDetailsForm.valid">Save</button>
         </div>
     </mat-card>
 
     <div class="tank-part" *ngIf="tankDetailsForm.get('tankType')?.value">
-        <!-- <svg width="1000" height="700" xmlns="http://www.w3.org/2000/svg">
-            <image href="../../../assets/tank-details/tank-detail-type1-part1.jpg" x="0" y="0" width="1000"
-                height="700" />
-            <foreignObject x="360" y="30" width="5rem" height="50">
-
-                <body xmlns="http://www.w3.org/1999/xhtml">
-                    <input type="text" formControlName="d1" placeholder="" style="width:4.5rem;" />
-                </body>
-            </foreignObject>
-            <foreignObject x="525" y="30" width="5rem" height="50">
-
-                <body xmlns="http://www.w3.org/1999/xhtml">
-                    <input type="text" formControlName="d2" placeholder="" style="width:4.5rem;" />
-                </body>
-            </foreignObject>
-        </svg> -->
-
-        <object #svgContainer type="image/svg+xml" data="assets/tank-details/generated-tank-details.svg" width="1000"
-            height="700"></object>
-        <button type="submit" (click)="onSubmit()">Submit</button>
+        <app-editable-svg [imageName]="imageName" [inputOnlyMode]="true"
+            (modifiedData)="handleModifiedData($event)"></app-editable-svg>
     </div>
 </form>

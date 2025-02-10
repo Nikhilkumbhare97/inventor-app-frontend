@@ -36,6 +36,8 @@
     </mat-card>
 </form>
 <app-tank-details [tankSection]="tankSection" [topCoverVisible]="topCoverVisible"
-    (tankDetailsformSubmit)="handleTankDetailsFormSubmit($event)"></app-tank-details>
+    (tankDetailsformSubmit)="handleTankDetailsFormSubmit($event)" (tankPayloads)="handleTankPayloads($event)"></app-tank-details>
 <app-top-cover-details [topCoverVisible]="topCoverVisible"
     (topCoverFormSubmit)="handleTopcoverDetailsFormSubmit($event)"></app-top-cover-details>
+<button mat-raised-button color="primary" *ngIf="transformerDetailsForm.get('designType')?.value === 'Non-standard' && tankDetailsData && tankInventorPayload"
+    (click)="generate()">Generate</button>

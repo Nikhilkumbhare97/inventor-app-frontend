@@ -1,18 +1,43 @@
-<select [(ngModel)]="selectedImage" (change)="onImageSelect(selectedImage)">
-    <option *ngFor="let image of images" [ngValue]="image">{{ image }}</option>
-</select>
+<!-- Image selection (Only when not in input-only mode) -->
+<div *ngIf="!inputOnlyMode">
+    <select [(ngModel)]="selectedImage" (change)="onImageSelect(selectedImage)">
+        <option *ngFor="let image of images" [ngValue]="image">{{ image }}</option>
+    </select>
 
-<button (click)="saveSvgData()">Save</button>
+    <button (click)="saveSvgData()">Save</button>
 
-<p>Selected Image: {{ selectedImage }}</p>
+    <p>Selected Image: {{ selectedImage }}</p>
+</div>
 
+<!-- Input-only mode save button -->
+<div *ngIf="inputOnlyMode">
+    <button (click)="saveModifiedData()" [disabled]="buttonDisabled">Save modifed</button>
+</div>
+
+<!-- SVG Content -->
 <div *ngIf="svgData">
-    <div class="svg-container">
+    <div *ngIf="!inputOnlyMode" class="svg-container">
         <img #svgImage [src]="svgData?.svgImage" class="svg-background" />
 
         <div *ngFor="let dim of svgData?.dimensions" class="draggable" cdkDrag
             [ngStyle]="{'top': dim.y + 'rem', 'left': dim.x + 'rem'}" (cdkDragEnded)="onDragEnd($event, dim)">
             <input type="number" [(ngModel)]="dim.defaultValue" />
+            <span>{{ dim.label }}</span>
+        </div>
+    </div>
+
+    <div *ngIf="inputOnlyMode" class="svg-container">
+        <img #svgImage [src]="svgData?.svgImage" class="svg-background" />
+
+        <!-- <div *ngFor="let dim of svgData?.dimensions" class="draggable" cdkDrag
+            [ngStyle]="{'top': dim.y + 'rem', 'left': dim.x + 'rem'}" (cdkDragEnded)="onDragEnd($event, dim)">
+            <input type="number" [(ngModel)]="dim.defaultValue" />
+            <span>{{ dim.label }}</span>
+        </div> -->
+        <div *ngFor="let dim of svgData?.dimensions" class="draggable"
+            [ngStyle]="{'top': dim.y + 'rem', 'left': dim.x + 'rem'}">
+            <input type="number" [(ngModel)]="dim.inputValue"
+                [ngClass]="{'modified': dim.inputValue !== dim.defaultValue}" (change)="trackChanges(dim)" />
             <span>{{ dim.label }}</span>
         </div>
     </div>

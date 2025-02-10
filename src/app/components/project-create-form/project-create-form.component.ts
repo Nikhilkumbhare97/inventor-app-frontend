@@ -23,9 +23,9 @@ export class ProjectCreateFormComponent implements OnInit {
   ngOnInit(): void {
 
     this.route.params.subscribe(params => {
-      if (params.projectUniqueId) {
+      if (params['projectUniqueId']) {
         this.isEditMode = true;
-        this.projectUniqueId = params.projectUniqueId;
+        this.projectUniqueId = params['projectUniqueId'];
       }
     });
     this.transformerDetailsForm = this.fb.group({

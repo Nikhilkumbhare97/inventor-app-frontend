@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProjectCreateFormComponent } from './components/project-create-form/project-create-form.component';
-import { SvgImageGeneratorComponent } from './components/svg-image-generator/svg-image-generator.component';
 import { ProjectsListComponent } from './components/projects-list/projects-list.component';
+import { EditableSvgComponent } from './components/editable-svg/editable-svg.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'projects', component: ProjectsListComponent },
   { path: 'create-project', component: ProjectCreateFormComponent },
   { path: 'edit-project/:projectUniqueId', component: ProjectCreateFormComponent },
-  { path: 'help', component: SvgImageGeneratorComponent }
+  { path: 'input-dragger', component: EditableSvgComponent }
 ];
 
 

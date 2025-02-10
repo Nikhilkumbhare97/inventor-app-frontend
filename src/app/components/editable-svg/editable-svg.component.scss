@@ -1,0 +1,30 @@
+.svg-container {
+    position: relative;
+    display: inline-block;
+    align-self: center;
+}
+
+.svg-background {
+    width: 90rem;
+    height: 67.5rem;
+}
+
+.draggable {
+    position: absolute;
+    cursor: move;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 2rem;
+    text-align: center;
+    transition: top 0.2s ease-out, left 0.2s ease-out;
+}
+
+.draggable input{
+    width: 4rem;
+    background-color: green;
+    color: white;
+}

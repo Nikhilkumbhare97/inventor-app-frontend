@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,10 +30,10 @@ import { HeaderComponent } from './components/header/header.component';
 import { ProjectDetailsComponent } from './components/project-details/project-details.component';
 import { TankDetailsComponent } from './components/tank-details/tank-details.component';
 import { TopCoverDetailsComponent } from './components/top-cover-details/top-cover-details.component';
-import { SvgImageGeneratorComponent } from './components/svg-image-generator/svg-image-generator.component';
 import { ProjectsListComponent } from './components/projects-list/projects-list.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { StatusDialogComponent } from './components/status-dialog/status-dialog.component';
+import { EditableSvgComponent } from './components/editable-svg/editable-svg.component';
 
 @NgModule({
   declarations: [
@@ -43,10 +45,10 @@ import { StatusDialogComponent } from './components/status-dialog/status-dialog.
     ProjectDetailsComponent,
     TankDetailsComponent,
     TopCoverDetailsComponent,
-    SvgImageGeneratorComponent,
     ProjectsListComponent,
     ConfirmationDialogComponent,
-    StatusDialogComponent
+    StatusDialogComponent,
+    EditableSvgComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +65,9 @@ import { StatusDialogComponent } from './components/status-dialog/status-dialog.
     MatSelectModule,
     MatTableModule,
     MatDialogModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    DragDropModule
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },

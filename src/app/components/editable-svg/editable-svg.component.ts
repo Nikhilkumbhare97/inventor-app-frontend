@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { SvgDataService } from '../../services/svg-data.service';
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 
@@ -8,18 +8,27 @@ import { CdkDragEnd } from '@angular/cdk/drag-drop';
   styleUrls: ['./editable-svg.component.scss']
 })
 export class EditableSvgComponent implements OnInit {
+  @Input() imageName: string = '';
+  @Input() inputOnlyMode: boolean = false;
+  @Output() modifiedData = new EventEmitter<any>();
   images: string[] = [];
   selectedImage: string = '';
   svgData: any;
   @ViewChild('svgContainer') svgContainer!: ElementRef;
   svgImageElement: any;
+  modifiedFields: any[] = [];
+  buttonDisabled: boolean = false;
 
   constructor(private svgDataService: SvgDataService, private renderer: Renderer2) {
 
   }
 
   ngOnInit() {
-    this.loadImages();
+    if (this.imageName) {
+      this.loadImageAndConfig(this.imageName);
+    } else {
+      this.loadImages();
+    }
   }
 
   loadImages() {
@@ -42,6 +51,11 @@ export class EditableSvgComponent implements OnInit {
     this.svgDataService.getSvgData(imageName).subscribe(
       (data: any) => {
         this.svgData = JSON.parse(data.config);
+        if (this.inputOnlyMode) {
+          this.svgData.dimensions.forEach((dim: any) => {
+            dim.inputValue = dim.defaultValue; // Initialize values
+          });
+        }
       },
       (error) => {
         alert(error)
@@ -81,5 +95,36 @@ export class EditableSvgComponent implements OnInit {
         alert('Failed to save SVG data.');
       }
     );
+  }
+
+  trackChanges(dim: any) {
+    const isModified = dim.inputValue !== dim.defaultValue;
+
+    if (isModified) {
+      const existingIndex = this.modifiedFields.findIndex(f => f.parameterName === dim.label);
+      if (existingIndex === -1) {
+        this.modifiedFields.push({
+          parameterName: dim.label,
+          newValue: dim.inputValue
+        });
+      } else {
+        this.modifiedFields[existingIndex].newValue = dim.inputValue;
+      }
+    } else {
+      this.modifiedFields = this.modifiedFields.filter(f => f.parameterName !== dim.label);
+    }
+
+  }
+
+  saveModifiedData() {
+    const modifiedFields = this.modifiedFields;
+    // Emit modified data to parent
+    const allDimensions = this.svgData.dimensions.map((dim: any) => ({
+      label: dim.label,
+      defaultValue: dim.defaultValue,
+      inputValue: dim.inputValue
+    }));
+    this.modifiedData.emit({ modifiedFields, allDimensions });
+    this.buttonDisabled = true;
   }
 }

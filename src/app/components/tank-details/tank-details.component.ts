@@ -11,19 +11,20 @@ export class TankDetailsComponent {
   @Input() tankSection = false;
   @Input() topCoverVisible = false;
   @Output() tankDetailsformSubmit: EventEmitter<any> = new EventEmitter<any>();
+  @Output() tankPayloads: EventEmitter<any> = new EventEmitter<any>();
+  imageName!: string;
   tankDetailsForm!: FormGroup;
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
 
+    this.imageName = '66kv-tank-part1';
     this.tankDetailsForm = this.fb.group({
       tankType: ['', Validators.required],
       jackingPad: ['', Validators.required],
       centreShifter: ['', Validators.required],
-      tankMaterial: ['', Validators.required],
-      d1: ['', Validators.required],
-      d2: ['', Validators.required]
+      tankMaterial: ['', Validators.required]
     })
   }
 
@@ -33,14 +34,7 @@ export class TankDetailsComponent {
     }
   }
 
-  onSubmit() {
-    const inputs = this.svgContainer.nativeElement.querySelectorAll('input');
-    const updatedData: any[] = [];
-
-    inputs.forEach((input: any) => {
-      updatedData.push({ placeholder: input.placeholder, value: input.value });
-    });
-
-    console.log('Updated Input Data:', updatedData);
+  handleModifiedData(event: any) {
+    this.tankPayloads.emit(event);
   }
 }

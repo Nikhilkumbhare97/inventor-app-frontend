@@ -1,0 +1,84 @@
+{
+    "fields": [
+        {
+            "type": "dropdown",
+            "name": "tankType",
+            "label": "Tank Type",
+            "options": [
+                {
+                    "value": "LV cable RH side",
+                    "label": "LV cable RH side"
+                },
+                {
+                    "value": "LV cable LH side",
+                    "label": "LV cable LH side"
+                },
+                {
+                    "value": "No LV cable box",
+                    "label": "No LV cable box"
+                }
+            ],
+            "validators": [
+                "required"
+            ],
+            "defaultValue": "LV cable RH side"
+        },
+        {
+            "type": "dropdown",
+            "name": "jackingPad",
+            "label": "Jacking Pad",
+            "options": [
+                {
+                    "value": "Type1",
+                    "label": "Type1"
+                },
+                {
+                    "value": "Type2",
+                    "label": "Type2"
+                }
+            ],
+            "validators": [
+                "required"
+            ],
+            "defaultValue": "Type1"
+        },
+        {
+            "type": "dropdown",
+            "name": "centreStiffner",
+            "label": "Centre Stiffner",
+            "options": [
+                {
+                    "value": "Yes",
+                    "label": "Yes"
+                },
+                {
+                    "value": "No",
+                    "label": "No"
+                }
+            ],
+            "validators": [
+                "required"
+            ],
+            "defaultValue": "Yes"
+        },
+        {
+            "type": "dropdown",
+            "name": "tankMaterial",
+            "label": "Tank Material",
+            "options": [
+                {
+                    "value": "MS & Steel",
+                    "label": "MS & Steel"
+                },
+                {
+                    "value": "Stainless Steel",
+                    "label": "Stainless Steel"
+                }
+            ],
+            "validators": [
+                "required"
+            ],
+            "defaultValue": "MS & Steel"
+        }
+    ]
+}

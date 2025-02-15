@@ -1,5 +1,7 @@
 <app-project-details [projectUniqueId]="projectUniqueId" [isEditMode]="isEditMode"
-    (transformerSection)="showTransformerDetails($event)"></app-project-details>
+    (transformerSection)="showTransformerDetails($event)" (projectDataLoaded)="projectDataLoaded($event)"
+    (createdProjectUniqueId)="createdProjectUniqueId($event)"></app-project-details>
+
 <form [formGroup]="transformerDetailsForm">
     <mat-card class="section box-outline" *ngIf="transformerSection">
         <h2>Transformer details</h2>
@@ -7,8 +9,8 @@
             <mat-form-field appearance="outline">
                 <mat-label>Type of transformer</mat-label>
                 <mat-select id="transformerType" formControlName="transformerType">
-                    <mat-option value="Type1">Type 1</mat-option>
-                    <mat-option value="Type2">Type 2</mat-option>
+                    <mat-option value="66KV">66KV</mat-option>
+                    <mat-option value="221OLTC">221OLTC</mat-option>
                 </mat-select>
                 <mat-error *ngIf="transformerDetailsForm.get('transformerType')?.hasError('required')">
                     Type of transformer is required
@@ -29,15 +31,22 @@
             <button mat-raised-button color="primary"
                 *ngIf="transformerDetailsForm.get('designType')?.value === 'Standard'"
                 (click)="generate()">Generate</button>
-            <button mat-raised-button color="primary"
-                *ngIf="transformerDetailsForm.get('designType')?.value === 'Non-standard'"
-                (click)="ContinueTransformerDetails()" [disabled]="tankSection">Continue</button>
+            <button *ngIf="transformerDetailsForm.get('designType')?.value === 'Non-standard'" mat-raised-button
+                color="primary" (click)="ContinueTransformerDetails()"
+                [disabled]="tankSection && transformerSaveButtonVisibility">Save</button>
         </div>
     </mat-card>
 </form>
-<app-tank-details [tankSection]="tankSection" [topCoverVisible]="topCoverVisible"
-    (tankDetailsformSubmit)="handleTankDetailsFormSubmit($event)" (tankPayloads)="handleTankPayloads($event)"></app-tank-details>
+<div *ngIf="tankSection">
+    <app-tank-details [transformerName]="transformerName" [tankDetailsData]="tankDetailsData" [isEditMode]="isEditMode"
+        [tankSection]="tankSection" [topCoverVisible]="topCoverVisible"
+        (tankDetailsformSubmit)="handleTankDetailsFormSubmit($event)"
+        (tankPayloads)="handleTankPayloads($event)"></app-tank-details>
+</div>
+
 <app-top-cover-details [topCoverVisible]="topCoverVisible"
     (topCoverFormSubmit)="handleTopcoverDetailsFormSubmit($event)"></app-top-cover-details>
-<button mat-raised-button color="primary" *ngIf="transformerDetailsForm.get('designType')?.value === 'Non-standard' && tankDetailsData && tankInventorPayload"
+
+<button mat-raised-button color="primary"
+    *ngIf="transformerDetailsForm.get('designType')?.value === 'Non-standard' && tankDetailsData && tankInventorPayload"
     (click)="generate()">Generate</button>

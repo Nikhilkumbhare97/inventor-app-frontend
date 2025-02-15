@@ -4,6 +4,8 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { GenerateService } from '../../services/generate.service';
 import { AssemblyService } from '../../services/assembly.service';
+import { TransformerService } from '../../services/transformer.service';
+import { TransformerConfigService } from '../../services/transformerConfig.service';
 
 @Component({
   selector: 'app-project-create-form',
@@ -21,22 +23,36 @@ export class ProjectCreateFormComponent implements OnInit {
   projectUniqueId: string | null = null;
   tankDBPayload: any;
   tankInventorPayload: any;
+  transformerSaveButtonVisibility: boolean = true;
+  generatedProjectUniqueId: string | null = null;
+  transformerName: any = '66KV';
+  tankSuppressionData: any = {};
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute, private generateService: GenerateService, private assemblyService: AssemblyService
-  ) { }
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private generateService: GenerateService,
+    private assemblyService: AssemblyService,
+    private transformerService: TransformerService,
+    private transformerConfigService: TransformerConfigService) { }
 
   ngOnInit(): void {
-
+    this.transformerDetailsForm = this.fb.group({
+      transformerType: ['', Validators.required],
+      designType: ['', Validators.required]
+    })
     this.route.params.subscribe(params => {
       if (params['projectUniqueId']) {
         this.isEditMode = true;
         this.projectUniqueId = params['projectUniqueId'];
       }
     });
-    this.transformerDetailsForm = this.fb.group({
-      transformerType: ['', Validators.required],
-      designType: ['', Validators.required]
-    })
+
+    this.transformerDetailsForm.get('transformerType')?.valueChanges.subscribe((value) => {
+      this.transformerSaveButtonVisibility = false;
+      this.transformerName = value;
+    });
+
   }
 
   onDesignTypeChange(): void {
@@ -76,6 +92,17 @@ export class ProjectCreateFormComponent implements OnInit {
               next: response => {
                 console.log('Success:', response);
                 alert(response.message);
+
+                this.assemblyService.suppressComponents(this.tankSuppressionData).subscribe({
+                  next: response => {
+                    console.log('Success:', response);
+                    alert(response.message);
+                  },
+                  error: error => {
+                    console.error('Error:', error);
+                    alert('Failed to suppress components.');
+                  }
+                });
               },
               error: error => {
                 console.error('Error:', error);
@@ -93,16 +120,117 @@ export class ProjectCreateFormComponent implements OnInit {
   }
 
   ContinueTransformerDetails(): void {
-    this.tankSection = true;
+
+    if (this.transformerDetailsForm.valid) {
+      const transformerDeatils = this.transformerDetailsForm.value;
+      const updateData = {
+        projectUniqueId: this.generatedProjectUniqueId ? this.generatedProjectUniqueId : (this.projectUniqueId ? this.projectUniqueId : ''),
+        transformerType: transformerDeatils.transformerType,
+        designType: transformerDeatils.designType
+      };
+
+      if (this.isEditMode && this.projectUniqueId) {
+        this.transformerService.updateTransformerDetails(this.projectUniqueId, updateData)
+          .subscribe({
+            next: () => {
+              this.transformerDetailsForm.disable();
+              this.tankSection = true;
+              this.transformerSaveButtonVisibility = true;
+
+            },
+            error: () => {
+              // Handle error (show error message to user)
+            }
+          });
+      } else {
+        this.transformerService.saveTransformerDetails(updateData)
+          .subscribe({
+            next: () => {
+              this.transformerDetailsForm.disable();
+              this.tankSection = true;
+              this.transformerSaveButtonVisibility = true;
+              this.generateTankSuppressionDetails();
+            },
+            error: () => {
+            }
+          });
+      }
+    }
+
+  }
+
+  loadTransformerDetails() {
+    if (!this.projectUniqueId) return;
+
+    this.transformerSection = true;
+
+    this.transformerService.getTransformerDetailsById(this.projectUniqueId).subscribe({
+      next: (transformerData) => {
+        // Update form with project data
+        this.transformerDetailsForm.patchValue({
+          transformerType: transformerData.transformerType,
+          designType: transformerData.designType,
+        });
+        if (this.projectUniqueId) { // Ensure it's not null before passing
+          this.transformerConfigService.getTransformerConfigDetailsById(String(this.projectUniqueId)).subscribe({
+            next: (transformerConfigData) => {
+              this.tankDetailsData = transformerConfigData.tankDetails;
+              this.tankSection = true;
+            },
+            error: (error) => {
+              // Handle error (show error message to user)
+            }
+          });
+        }
+      },
+      error: (error) => {
+        // Handle error (show error message to user)
+      }
+    });
   }
 
   showTransformerDetails(eventData: boolean): void {
     this.transformerSection = eventData;
   }
 
+  projectDataLoaded(event: boolean) {
+    if (this.isEditMode && this.projectUniqueId && event) {
+      this.loadTransformerDetails();
+    }
+  }
+
   handleTankDetailsFormSubmit(formData: any): void {
     this.tankDetailsData = formData;
-    //this.topCoverVisible = true;
+
+    if (formData) {
+      const updatedData = {
+        tankDetails: JSON.stringify(formData),
+        projectUniqueId: this.generatedProjectUniqueId ? this.generatedProjectUniqueId : (this.projectUniqueId ? this.projectUniqueId : ''),
+      }
+
+      if (this.isEditMode && this.projectUniqueId) {
+        this.transformerConfigService.updateTransformerConfigDetails(this.projectUniqueId, updatedData)
+          .subscribe({
+            next: () => {
+              this.generateTankSuppressionDetails();
+            },
+            error: () => {
+              // Handle error (show error message to user)
+            }
+          });
+      } else {
+        this.transformerConfigService.saveTransformerConfigDetails(updatedData)
+          .subscribe({
+            next: () => {
+
+              this.generateTankSuppressionDetails();
+            },
+            error: () => {
+            }
+          });
+      }
+    }
+
   }
   handleTopcoverDetailsFormSubmit(formData: any): void {
     this.topCoverDetailsData = formData;
@@ -111,5 +239,20 @@ export class ProjectCreateFormComponent implements OnInit {
   handleTankPayloads(event: any) {
     this.tankDBPayload = event.allDimensions;
     this.tankInventorPayload = event.modifiedFields
+  }
+
+  createdProjectUniqueId(event: any) {
+    this.generatedProjectUniqueId = event
+  }
+
+  generateTankSuppressionDetails() {
+    this.generateService.getSuppressionData(this.tankDetailsData, this.transformerName).subscribe((suppressionData: any) => {
+      console.log('Generated Suppression Data:', suppressionData);
+      this.tankSuppressionData = suppressionData
+
+      // this.generateService.sendSuppressionData(suppressionData).subscribe((response: any) => {
+      //   console.log('Suppression Response:', response);
+      // });
+    });
   }
 }

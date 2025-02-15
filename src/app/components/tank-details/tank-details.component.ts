@@ -1,40 +1,111 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  Component, ElementRef, EventEmitter, Input, Output, ViewChild, OnChanges, SimpleChanges
+} from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { catchError, map, of } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
+
+interface FieldConfig {
+  type: string;
+  name: string;
+  label: string;
+  options?: { value: string; label: string }[];
+  validators?: string[];
+  defaultValue?: string;
+}
+
+interface Configuration {
+  fields: FieldConfig[];
+}
 
 @Component({
   selector: 'app-tank-details',
   templateUrl: './tank-details.component.html',
   styleUrls: ['./tank-details.component.scss']
 })
-export class TankDetailsComponent {
+export class TankDetailsComponent implements OnChanges {
   @ViewChild('svgContainer', { static: false }) svgContainer!: ElementRef;
   @Input() tankSection = false;
+  @Input() tankDetailsData: any = {};
+  @Input() isEditMode = false;
   @Input() topCoverVisible = false;
-  @Output() tankDetailsformSubmit: EventEmitter<any> = new EventEmitter<any>();
-  @Output() tankPayloads: EventEmitter<any> = new EventEmitter<any>();
-  imageName!: string;
-  tankDetailsForm!: FormGroup;
+  @Input() transformerName = '';
+  @Output() tankDetailsformSubmit = new EventEmitter<any>();
+  @Output() tankPayloads = new EventEmitter<any>();
 
-  constructor(private fb: FormBuilder) { }
+  imageName = '66kv-tank-part1';
+  tankDetailsForm!: FormGroup;
+  fieldConfigurations: FieldConfig[] = [];
+
+  constructor(private fb: FormBuilder, private http: HttpClient, private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
+    this.tankDetailsForm = this.fb.group({});
+    if (this.tankSection) {
+      this.loadConfiguration(this.transformerName);
+    }
+  }
 
-    this.imageName = '66kv-tank-part1';
-    this.tankDetailsForm = this.fb.group({
-      tankType: ['', Validators.required],
-      jackingPad: ['', Validators.required],
-      centreShifter: ['', Validators.required],
-      tankMaterial: ['', Validators.required]
-    })
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['tankDetailsData'] && this.tankDetailsForm) {
+      this.patchTankDetailsForm();
+    }
+  }
+
+  private loadConfiguration(transformerName: string): void {
+    this.http.get<Configuration>(`assets/configurations/tankConfigurations/${transformerName}.json`)
+      .pipe(
+        catchError(error => {
+          return of(null);
+        }),
+        map(config => config?.fields || [])
+      )
+      .subscribe(fields => {
+        this.fieldConfigurations = fields;
+        this.buildForm();
+      });
+  }
+
+  private buildForm(): void {
+    const formGroup: Record<string, FormControl> = {};
+
+    this.fieldConfigurations.forEach(field => {
+      const validators: ValidatorFn[] = (field.validators || [])
+        .map(v => (v === 'required' ? Validators.required : null))
+        .filter(Boolean) as ValidatorFn[];
+
+      const defaultValue = this.isEditMode ? '' : field.defaultValue || '';
+
+      formGroup[field.name] = new FormControl(defaultValue, validators);
+    });
+
+    this.tankDetailsForm = this.fb.group(formGroup);
+    this.patchTankDetailsForm(); // Ensure form gets data if available
+  }
+
+  private patchTankDetailsForm(): void {
+    if (this.isEditMode && this.tankDetailsData && this.tankDetailsForm) {
+      try {
+        const parsedData = typeof this.tankDetailsData === 'string'
+          ? JSON.parse(this.tankDetailsData)
+          : this.tankDetailsData;
+
+        this.tankDetailsForm.patchValue(parsedData);
+        this.cdRef.detectChanges();
+      } catch (error) {
+      }
+    }
   }
 
   onTankDetailsFormSubmit(): void {
     if (this.tankDetailsForm.valid) {
       this.tankDetailsformSubmit.emit(this.tankDetailsForm.value);
+      this.tankDetailsForm.disable();
     }
   }
 
-  handleModifiedData(event: any) {
+  handleModifiedData(event: any): void {
     this.tankPayloads.emit(event);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProjectService } from '../../services/project.service';
 
@@ -7,10 +7,13 @@ import { ProjectService } from '../../services/project.service';
   templateUrl: './project-details.component.html',
   styleUrls: ['./project-details.component.scss']
 })
-export class ProjectDetailsComponent {
-  @Output() transformerSection: EventEmitter<boolean> = new EventEmitter<boolean>();
+export class ProjectDetailsComponent implements OnChanges {
+  @Output() transformerSection = new EventEmitter<boolean>();
+  @Output() projectDataLoaded = new EventEmitter<boolean>();
+  @Output() createdProjectUniqueId = new EventEmitter<any>();
   @Input() projectUniqueId: string | null = null;
   @Input() isEditMode = false;
+
   projectDetailsForm!: FormGroup;
   showSection2 = false;
 
@@ -18,11 +21,15 @@ export class ProjectDetailsComponent {
 
   ngOnInit(): void {
     this.initForm();
-
     if (this.isEditMode && this.projectUniqueId) {
       this.loadProjectData();
     }
+  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['projectUniqueId'] && this.isEditMode) {
+      this.loadProjectData();
+    }
   }
 
   private initForm(): void {
@@ -43,80 +50,46 @@ export class ProjectDetailsComponent {
 
     this.projectService.getProjectById(this.projectUniqueId).subscribe({
       next: (projectData) => {
-        // Show both sections when in edit mode
         this.showSection2 = true;
-
-        // Update form with project data
         this.projectDetailsForm.patchValue({
-          projectName: projectData.projectName,
-          projectNumber: projectData.projectNumber,
-          projectId: projectData.projectId,
-          clientName: projectData.clientName,
-          createdBy: projectData.createdBy,
-          preparedBy: projectData.preparedBy,
-          checkedBy: projectData.checkedBy,
-          date: new Date(projectData.date)
+          ...projectData,
+          date: new Date(projectData.date) // Ensure proper date format
         });
+        this.projectDataLoaded.emit(true);
       },
-      error: (error) => {
-        // Handle error (show error message to user)
-      }
+      error: (error) => console.error("❌ Error fetching project data:", error)
     });
   }
 
-  get projectDetailsFormSection1Valid(): boolean {
-    return !!this.projectDetailsForm.get('projectName')?.valid && !!this.projectDetailsForm.get('projectNumber')?.valid && !!this.projectDetailsForm.get('clientName')?.valid;
+  get isSection1Valid(): boolean {
+    return ['projectName', 'projectNumber', 'clientName'].every(field => this.projectDetailsForm.get(field)?.valid);
   }
 
-  get projectDetailsFormSection2Valid(): boolean {
-    return !!this.projectDetailsForm.get('createdBy')?.valid && !!this.projectDetailsForm.get('preparedBy')?.valid && !!this.projectDetailsForm.get('checkedBy')?.valid && !!this.projectDetailsForm.get('date')?.valid;
+  get isSection2Valid(): boolean {
+    return ['createdBy', 'preparedBy', 'checkedBy', 'date'].every(field => this.projectDetailsForm.get(field)?.valid);
   }
 
   nextSection(): void {
-    if (this.projectDetailsFormSection1Valid) {
+    if (this.isSection1Valid) {
       this.showSection2 = true;
     }
   }
 
   onProjectFormSave(): void {
-    if (this.projectDetailsForm.valid) {
-      const projectData = this.projectDetailsForm.value;
+    if (this.projectDetailsForm.invalid) return;
 
-      if (this.isEditMode && this.projectUniqueId) {
-        // In edit mode, only send editable fields
-        const updateData = {
-          projectName: projectData.projectName,
-          projectNumber: projectData.projectNumber,
-          projectId: projectData.projectId,
-          clientName: projectData.clientName,
-          createdBy: projectData.createdBy,
-          preparedBy: projectData.preparedBy,
-          checkedBy: projectData.checkedBy,
-          date: projectData.date
-        };
+    const projectData = this.projectDetailsForm.value;
+    const saveOperation = this.isEditMode && this.projectUniqueId
+      ? this.projectService.updateProject(this.projectUniqueId, projectData)
+      : this.projectService.createProject(projectData);
 
-        this.projectService.updateProject(this.projectUniqueId, updateData)
-          .subscribe({
-            next: (response) => {
-              this.showTransformerDetails();
-            },
-            error: (error) => {
-              // Handle error (show error message to user)
-            }
-          });
-      } else {
-        // Create new project
-        this.projectService.createProject(projectData)
-          .subscribe({
-            next: (response) => {
-              this.showTransformerDetails();
-            },
-            error: (error) => {
-              // Handle error (show error message to user)
-            }
-          });
-      }
-    }
+    saveOperation.subscribe({
+      next: (data) => {
+        this.createdProjectUniqueId.emit(data.projectUniqueId)
+        this.showTransformerDetails();
+      },
+      error: (error) => console.error("❌ Error saving project:", error)
+    });
   }
 
   showTransformerDetails(): void {

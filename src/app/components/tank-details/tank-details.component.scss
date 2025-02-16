@@ -26,15 +26,14 @@ body {
 .form-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 10rem;
+    gap: 1rem;
+    justify-content: space-between;
 }
 
-mat-form-field {
-    flex: 1;
-    min-width: 200px;
-    max-width: 632px;
-    background-color: var(--accent-bg);
-    border-radius: 0.5rem;
+.form-group {
+    flex: 1 1 30%;
+    /* Adjust to ensure three fields per row */
+    max-width: 30%;
 }
 
 .button-row {
@@ -53,7 +52,10 @@ button {
     align-items: center;
     position: relative;
     margin: 1rem;
-    /* Added this line */
+}
+
+mat-form-field {
+    width: 100%;
 }
 
 input[type="text"] {
@@ -62,5 +64,4 @@ input[type="text"] {
     padding: 0.5rem;
     border-radius: 0.3rem;
     cursor: move;
-  }
-  
+}

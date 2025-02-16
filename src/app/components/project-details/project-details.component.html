@@ -4,14 +4,14 @@
         <div class="form-row">
             <mat-form-field appearance="outline">
                 <mat-label>Project Name</mat-label>
-                <input matInput id="projectName" formControlName="projectName">
+                <input matInput formControlName="projectName">
                 <mat-error *ngIf="projectDetailsForm.get('projectName')?.hasError('required')">
                     Project Name is required
                 </mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Project Number</mat-label>
-                <input matInput id="projectNumber" formControlName="projectNumber">
+                <input matInput formControlName="projectNumber">
                 <mat-error *ngIf="projectDetailsForm.get('projectNumber')?.hasError('required')">
                     Project Number is required
                 </mat-error>
@@ -20,11 +20,11 @@
         <div class="form-row">
             <mat-form-field appearance="outline">
                 <mat-label>Project ID</mat-label>
-                <input matInput id="projectId" formControlName="projectId">
+                <input matInput formControlName="projectId">
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Client Name</mat-label>
-                <input matInput id="clientName" formControlName="clientName">
+                <input matInput formControlName="clientName">
                 <mat-error *ngIf="projectDetailsForm.get('clientName')?.hasError('required')">
                     Client Name is required
                 </mat-error>
@@ -32,7 +32,7 @@
         </div>
         <div *ngIf="!isEditMode" class="button-row">
             <button mat-raised-button color="primary" (click)="nextSection()"
-                [disabled]="!projectDetailsFormSection1Valid">Next</button>
+                [disabled]="!isSection1Valid">Next</button>
         </div>
     </mat-card>
 
@@ -41,14 +41,14 @@
         <div class="form-row">
             <mat-form-field appearance="outline">
                 <mat-label>Created by</mat-label>
-                <input matInput id="createdBy" formControlName="createdBy">
+                <input matInput formControlName="createdBy">
                 <mat-error *ngIf="projectDetailsForm.get('createdBy')?.hasError('required')">
                     Created by is required
                 </mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Prepared by</mat-label>
-                <input matInput id="preparedBy" formControlName="preparedBy">
+                <input matInput formControlName="preparedBy">
                 <mat-error *ngIf="projectDetailsForm.get('preparedBy')?.hasError('required')">
                     Prepared by is required
                 </mat-error>
@@ -57,14 +57,14 @@
         <div class="form-row">
             <mat-form-field appearance="outline">
                 <mat-label>Checked by</mat-label>
-                <input matInput id="checkedBy" formControlName="checkedBy">
+                <input matInput formControlName="checkedBy">
                 <mat-error *ngIf="projectDetailsForm.get('checkedBy')?.hasError('required')">
                     Checked by is required
                 </mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Date</mat-label>
-                <input matInput [matDatepicker]="picker" id="date" formControlName="date">
+                <input matInput [matDatepicker]="picker" formControlName="date">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
                 <mat-error *ngIf="projectDetailsForm.get('date')?.hasError('required')">
@@ -74,10 +74,9 @@
         </div>
         <div class="button-row">
             <button mat-raised-button color="primary" (click)="onProjectFormSave()"
-                [disabled]="!projectDetailsFormSection2Valid">Save</button>
+                [disabled]="!isSection2Valid">Save</button>
             <button *ngIf="isEditMode" mat-raised-button color="primary" (click)="showTransformerDetails()"
-                [disabled]="!projectDetailsFormSection2Valid">Next</button>
+                [disabled]="!isSection2Valid">Next</button>
         </div>
     </mat-card>
-
 </form>

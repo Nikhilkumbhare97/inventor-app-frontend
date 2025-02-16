@@ -32,6 +32,10 @@ export class AssemblyService {
             );
     }
 
+    suppressComponents(data: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/suppress-multiple-components`, data).pipe(catchError(this.handleError));;
+    }
+
     private handleError(error: any) {  // Centralized error handling
 
         // Return an observable with a user-facing error message

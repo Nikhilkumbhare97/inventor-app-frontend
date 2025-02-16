@@ -21,6 +21,7 @@ import { DatePipe } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 // components
 import { LoginComponent } from './components/login/login.component';
@@ -34,6 +35,7 @@ import { ProjectsListComponent } from './components/projects-list/projects-list.
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { StatusDialogComponent } from './components/status-dialog/status-dialog.component';
 import { EditableSvgComponent } from './components/editable-svg/editable-svg.component';
+import { LvTrunkingDetailsComponent } from './components/lv-trunking-details/lv-trunking-details.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,8 @@ import { EditableSvgComponent } from './components/editable-svg/editable-svg.com
     ProjectsListComponent,
     ConfirmationDialogComponent,
     StatusDialogComponent,
-    EditableSvgComponent
+    EditableSvgComponent,
+    LvTrunkingDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -67,7 +70,8 @@ import { EditableSvgComponent } from './components/editable-svg/editable-svg.com
     MatDialogModule,
     HttpClientModule,
     FormsModule,
-    DragDropModule
+    DragDropModule,
+    MatExpansionModule
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },

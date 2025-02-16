@@ -39,9 +39,16 @@
 </form>
 <div *ngIf="tankSection">
     <app-tank-details [transformerName]="transformerName" [tankDetailsData]="tankDetailsData" [isEditMode]="isEditMode"
-        [tankSection]="tankSection" [topCoverVisible]="topCoverVisible"
+        [tankSection]="tankSection" [lvTrunkingVisible]="lvTrunkingVisible"
         (tankDetailsformSubmit)="handleTankDetailsFormSubmit($event)"
         (tankPayloads)="handleTankPayloads($event)"></app-tank-details>
+</div>
+
+<div *ngIf="lvTrunkingVisible">
+    <app-lv-trunking-details [transformerName]="transformerName" [isEditMode]="isEditMode"
+        [lvTrunkingVisible]="lvTrunkingVisible"
+        (lvTrunckingDetailsformSubmit)="handleLVTrunkingDetailsFormSubmit($event)"
+        (lvTrunckingPayloads)="handleLVTrunkingPayloads($event)"></app-lv-trunking-details>
 </div>
 
 <app-top-cover-details [topCoverVisible]="topCoverVisible"

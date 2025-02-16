@@ -80,5 +80,11 @@
             ],
             "defaultValue": "MS & Steel"
         }
+    ],
+    "images": [
+        "66kv_01",
+        "66kv_02",
+        "66kv_03",
+        "66kv_04"
     ]
 }

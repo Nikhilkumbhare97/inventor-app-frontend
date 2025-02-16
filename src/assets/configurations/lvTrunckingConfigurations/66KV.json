@@ -1,0 +1,49 @@
+{
+    "fields": [
+        {
+            "type": "dropdown",
+            "name": "flangeType",
+            "label": "Flange Type",
+            "options": [
+                {
+                    "value": "Type1",
+                    "label": "Type1"
+                },
+                {
+                    "value": "Type2",
+                    "label": "Type2"
+                },
+                {
+                    "value": "Type3",
+                    "label": "Type3"
+                }
+            ],
+            "validators": [
+                "required"
+            ],
+            "defaultValue": "Type1"
+        },
+        {
+            "type": "dropdown",
+            "name": "flangeMaterial",
+            "label": "Flange Material",
+            "options": [
+                {
+                    "value": "MS & Steel",
+                    "label": "MS & Steel"
+                },
+                {
+                    "value": "Copper",
+                    "label": "Copper"
+                }
+            ],
+            "validators": [
+                "required"
+            ],
+            "defaultValue": "MS & Steel"
+        }
+    ],
+    "images": [
+        "66kv_05"
+    ]
+}

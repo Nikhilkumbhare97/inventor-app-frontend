@@ -29,7 +29,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     column-gap: 1.7rem;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 .form-group {
@@ -95,11 +95,4 @@ input[type="text"] {
     border-radius: 0.3rem;
     cursor: move;
     border: 1px solid var(--highlight-bg);
-}
-
-/* Align Save Button to the Right */
-.save-modified {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 1rem;
 }

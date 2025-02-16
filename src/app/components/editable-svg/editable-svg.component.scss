@@ -25,11 +25,26 @@
 
 .draggable input {
     width: 4rem;
+    height: 1.5rem;
     background-color: green;
     color: white;
+    //font-weight: bolder;
+    //font-size: 1.25rem;
+    text-align: center;
+    border-radius: 6px;
 }
 
 .draggable input.modified {
     background-color: red;
     color: white;
+}
+
+.save-modified {
+    display: flex;
+    justify-content: flex-end; // Aligns content to the right
+}
+
+.parameter-label {
+    font-size: 0.8rem;
+    color: black;
 }

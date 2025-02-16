@@ -1,8 +1,8 @@
-<form [formGroup]="tankDetailsForm">
-    <mat-card class="section box-outline" *ngIf="tankSection">
-        <h2>Tank details</h2>
+<form [formGroup]="lvTrunckingDetailsForm">
+    <mat-card class="section box-outline" *ngIf="lvTrunkingVisible">
+        <h2>LV truncking details</h2>
         <div class="form-row">
-            <div class="form-group" *ngFor="let field of fieldConfigurations" [formGroup]="tankDetailsForm">
+            <div class="form-group" *ngFor="let field of fieldConfigurations" [formGroup]="lvTrunckingDetailsForm">
                 <mat-form-field appearance="outline">
                     <mat-label>{{ field.label }}</mat-label>
                     <ng-container [ngSwitch]="field.type">
@@ -13,20 +13,20 @@
                         </mat-select>
                         <!-- Add more field types here as needed -->
                     </ng-container>
-                    <mat-error *ngIf="tankDetailsForm.get(field.name)?.hasError('required')">
+                    <mat-error *ngIf="lvTrunckingDetailsForm.get(field.name)?.hasError('required')">
                         {{ field.label }} is required
                     </mat-error>
                 </mat-form-field>
             </div>
         </div>
         <div class="button-row">
-            <button mat-raised-button color="primary" (click)="onTankDetailsFormSubmit()"
-                [disabled]="!tankDetailsForm.valid">Save</button>
+            <button mat-raised-button color="primary" (click)="onlvTrunckingDetailsFormSubmit()"
+                [disabled]="!lvTrunckingDetailsForm.valid">Save</button>
         </div>
     </mat-card>
 
     <mat-accordion>
-        <div *ngIf="tankDetailsForm.get('tankType')?.value">
+        <div *ngIf="lvTrunckingDetailsForm.get('flangeType')?.value">
             <mat-expansion-panel *ngFor="let imageName of imageList" class="tank-part">
                 <mat-expansion-panel-header>
                 </mat-expansion-panel-header>
@@ -37,5 +37,4 @@
             </mat-expansion-panel>
         </div>
     </mat-accordion>
-
 </form>

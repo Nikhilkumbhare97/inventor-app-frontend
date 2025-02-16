@@ -21,21 +21,21 @@ interface Configuration {
 }
 
 @Component({
-  selector: 'app-tank-details',
-  templateUrl: './tank-details.component.html',
-  styleUrls: ['./tank-details.component.scss']
+  selector: 'app-lv-trunking-details',
+  templateUrl: './lv-trunking-details.component.html',
+  styleUrls: ['./lv-trunking-details.component.scss']
 })
-export class TankDetailsComponent implements OnChanges {
+export class LvTrunkingDetailsComponent implements OnChanges {
   @ViewChild('svgContainer', { static: false }) svgContainer!: ElementRef;
-  @Input() tankSection = false;
-  @Input() tankDetailsData: any = {};
-  @Input() isEditMode = false;
   @Input() lvTrunkingVisible = false;
+  @Input() lvTrunckingDetailsData: any = {};
+  @Input() isEditMode = false;
+  @Input() topCoverVisible = false;
   @Input() transformerName = '';
-  @Output() tankDetailsformSubmit = new EventEmitter<any>();
-  @Output() tankPayloads = new EventEmitter<any>();
+  @Output() lvTrunckingDetailsformSubmit = new EventEmitter<any>();
+  @Output() lvTrunckingPayloads = new EventEmitter<any>();
 
-  tankDetailsForm!: FormGroup;
+  lvTrunckingDetailsForm!: FormGroup;
   fieldConfigurations: FieldConfig[] = [];
   imageList: any = [];
   combinedData: any[] = [];
@@ -43,20 +43,23 @@ export class TankDetailsComponent implements OnChanges {
   constructor(private fb: FormBuilder, private http: HttpClient, private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.tankDetailsForm = this.fb.group({});
-    if (this.tankSection) {
+    this.isEditMode = false;
+    console.log('lvTrunkingVisible', this.lvTrunkingVisible)
+    this.lvTrunckingDetailsForm = this.fb.group({});
+    if (this.lvTrunkingVisible) {
       this.loadConfiguration(this.transformerName);
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['tankDetailsData'] && this.tankDetailsForm) {
-      this.patchTankDetailsForm();
+    if (changes['lvTrunckingDetailsData'] && this.lvTrunckingDetailsForm) {
+      //this.patchlvTrunckingDetailsForm();
+      this.loadConfiguration(this.transformerName);
     }
   }
 
   private loadConfiguration(transformerName: string): void {
-    this.http.get<Configuration>(`assets/configurations/tankConfigurations/${transformerName}.json`)
+    this.http.get<Configuration>(`assets/configurations/lvTrunckingConfigurations/${transformerName}.json`)
       .pipe(
         catchError(error => {
           console.error("Error loading configuration:", error);
@@ -83,28 +86,29 @@ export class TankDetailsComponent implements OnChanges {
       formGroup[field.name] = new FormControl(defaultValue, validators);
     });
 
-    this.tankDetailsForm = this.fb.group(formGroup);
-    this.patchTankDetailsForm(); // Ensure form gets data if available
+    this.lvTrunckingDetailsForm = this.fb.group(formGroup);
+    console.log('this.lvTrunckingDetailsForm', this.lvTrunckingDetailsForm)
+    //this.patchlvTrunckingDetailsForm(); // Ensure form gets data if available
   }
 
-  private patchTankDetailsForm(): void {
-    if (this.isEditMode && this.tankDetailsData && this.tankDetailsForm) {
+  private patchlvTrunckingDetailsForm(): void {
+    if (this.isEditMode && this.lvTrunckingDetailsData && this.lvTrunckingDetailsForm) {
       try {
-        const parsedData = typeof this.tankDetailsData === 'string'
-          ? JSON.parse(this.tankDetailsData)
-          : this.tankDetailsData;
+        const parsedData = typeof this.lvTrunckingDetailsData === 'string'
+          ? JSON.parse(this.lvTrunckingDetailsData)
+          : this.lvTrunckingDetailsData;
 
-        this.tankDetailsForm.patchValue(parsedData);
+        this.lvTrunckingDetailsForm.patchValue(parsedData);
         this.cdRef.detectChanges();
       } catch (error) {
       }
     }
   }
 
-  onTankDetailsFormSubmit(): void {
-    if (this.tankDetailsForm.valid) {
-      this.tankDetailsformSubmit.emit(this.tankDetailsForm.value);
-      this.tankDetailsForm.disable();
+  onlvTrunckingDetailsFormSubmit(): void {
+    if (this.lvTrunckingDetailsForm.valid) {
+      this.lvTrunckingDetailsformSubmit.emit(this.lvTrunckingDetailsForm.value);
+      this.lvTrunckingDetailsForm.disable();
     }
   }
 
@@ -121,6 +125,6 @@ export class TankDetailsComponent implements OnChanges {
     }
 
     // Emit the combined data
-    this.tankPayloads.emit(this.combinedData);
+    this.lvTrunckingPayloads.emit(this.combinedData);
   }
 }

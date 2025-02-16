@@ -16,6 +16,7 @@ export class ProjectCreateFormComponent implements OnInit {
   transformerDetailsForm!: FormGroup;
   transformerSection = false;
   tankSection = false;
+  lvTrunkingVisible = false;
   topCoverVisible = false;
   tankDetailsData: any;
   topCoverDetailsData: any;
@@ -135,6 +136,7 @@ export class ProjectCreateFormComponent implements OnInit {
             next: () => {
               this.transformerDetailsForm.disable();
               this.tankSection = true;
+              this.lvTrunkingVisible = true;
               this.transformerSaveButtonVisibility = true;
 
             },
@@ -148,6 +150,7 @@ export class ProjectCreateFormComponent implements OnInit {
             next: () => {
               this.transformerDetailsForm.disable();
               this.tankSection = true;
+              this.lvTrunkingVisible = true;
               this.transformerSaveButtonVisibility = true;
               this.generateTankSuppressionDetails();
             },
@@ -176,6 +179,7 @@ export class ProjectCreateFormComponent implements OnInit {
             next: (transformerConfigData) => {
               this.tankDetailsData = transformerConfigData.tankDetails;
               this.tankSection = true;
+              this.lvTrunkingVisible = true;
             },
             error: (error) => {
               // Handle error (show error message to user)
@@ -232,13 +236,24 @@ export class ProjectCreateFormComponent implements OnInit {
     }
 
   }
+
+  handleLVTrunkingDetailsFormSubmit(formData: any): void {
+  }
+
   handleTopcoverDetailsFormSubmit(formData: any): void {
     this.topCoverDetailsData = formData;
   }
 
-  handleTankPayloads(event: any) {
-    this.tankDBPayload = event.allDimensions;
-    this.tankInventorPayload = event.modifiedFields
+  handleTankPayloads(event: any[]): void {
+    this.tankDBPayload = event.flatMap(imageData => imageData.allDimensions);
+    this.tankInventorPayload = event.flatMap(imageData => imageData.modifiedFields);
+
+    console.log("Merged allDimensions:", this.tankDBPayload);
+    console.log("Merged modifiedFields:", this.tankInventorPayload);
+  }
+
+  handleLVTrunkingPayloads(event: any[]): void {
+
   }
 
   createdProjectUniqueId(event: any) {

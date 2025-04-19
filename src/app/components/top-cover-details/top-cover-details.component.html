@@ -1,43 +1,48 @@
-<form [formGroup]="topCoverDetailsForm" (ngSubmit)="onTopCoverDetailsFormSubmit()">
+<form [formGroup]="topCoverDetailsForm">
     <mat-card class="section box-outline" *ngIf="topCoverVisible">
-        <h2>Top Cover Details</h2>
+        <h2>Top cover details</h2>
         <div class="form-row">
-            <mat-form-field appearance="outline">
-                <mat-label>Top Cover Type</mat-label>
-                <mat-select id="topCoverType" formControlName="topCoverType">
-                    <mat-option value="Type1">Type1</mat-option>
-                    <mat-option value="Type2">Type2</mat-option>
-                </mat-select>
-                <mat-error *ngIf="topCoverDetailsForm.get('topCoverType')?.hasError('required')">
-                    Top Cover Type is required
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Big Pipe</mat-label>
-                <mat-select id="bigPipe" formControlName="bigPipe">
-                    <mat-option value="Yes">Yes</mat-option>
-                    <mat-option value="No">No</mat-option>
-                </mat-select>
-                <mat-error *ngIf="topCoverDetailsForm.get('bigPipe')?.hasError('required')">
-                    Big Pipe is required
-                </mat-error>
-            </mat-form-field>
-        </div>
-        <div class="form-row">
-            <mat-form-field appearance="outline">
-                <mat-label>Job Locking</mat-label>
-                <mat-select id="jobLocking" formControlName="jobLocking">
-                    <mat-option value="2">2</mat-option>
-                    <mat-option value="3">3</mat-option>
-                </mat-select>
-                <mat-error *ngIf="topCoverDetailsForm.get('jobLocking')?.hasError('required')">
-                    Job Locking is required
-                </mat-error>
-            </mat-form-field>
+            <div class="form-group" *ngFor="let field of fieldConfigurations" [formGroup]="topCoverDetailsForm">
+                <mat-form-field appearance="outline">
+                    <mat-label>{{ field.label }}</mat-label>
+                    <ng-container [ngSwitch]="field.type">
+                        <mat-select *ngSwitchCase="'dropdown'" [formControlName]="field.name">
+                            <mat-option *ngFor="let option of field.options" [value]="option.value">
+                                {{ option.label }}
+                            </mat-option>
+                        </mat-select>
+                        <!-- Add more field types here as needed -->
+                    </ng-container>
+                    <mat-error *ngIf="topCoverDetailsForm.get(field.name)?.hasError('required')">
+                        {{ field.label }} is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
         </div>
         <div class="button-row">
-            <button mat-raised-button color="primary" type="submit"
+            <button mat-raised-button color="primary" (click)="onTopCoverDetailsFormSubmit()"
                 [disabled]="!topCoverDetailsForm.valid">Save</button>
         </div>
     </mat-card>
+
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item" *ngIf="topCoverDetailsForm.get('topCoverType')?.value">
+            <div class="accordion-item" *ngFor="let imageName of imageList">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        [attr.data-bs-target]="'#collapse' + imageName" aria-expanded="true"
+                        [attr.aria-controls]="'collapse' + imageName">
+                        {{ imageName }}
+                    </button>
+                </h2>
+                <div [id]="'collapse' + imageName" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        <app-editable-svg [imageName]="imageName" [inputOnlyMode]="true"
+                            (modifiedData)="handleModifiedData($event, imageName)">
+                        </app-editable-svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>

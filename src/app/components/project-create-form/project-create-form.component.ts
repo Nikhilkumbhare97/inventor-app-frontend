@@ -19,15 +19,25 @@ export class ProjectCreateFormComponent implements OnInit {
   lvTrunkingVisible = false;
   topCoverVisible = false;
   tankDetailsData: any;
+  lvTrunkingDetailsData: any;
   topCoverDetailsData: any;
   isEditMode = false;
   projectUniqueId: string | null = null;
   tankDBPayload: any;
+  lvTrunkingDBPayload: any;
+  topCoverDBPayload: any;
   tankInventorPayload: any;
+  lvTrunkingInventorPayload: any;
+  topCoverInventorPayload: any;
   transformerSaveButtonVisibility: boolean = true;
   generatedProjectUniqueId: string | null = null;
   transformerName: any = '66KV';
   tankSuppressionData: any = {};
+  lvTrunkingSuppressionData: any = {};
+  topCoverSuppressionData: any = {};
+  tankIpartsIassembliesData: any = {};
+  lvTrunkingIpartsIassembliesData: any = {};
+  topCoverIpartsIassembliesData: any = {};
 
   constructor(
     private fb: FormBuilder,
@@ -41,7 +51,7 @@ export class ProjectCreateFormComponent implements OnInit {
     this.transformerDetailsForm = this.fb.group({
       transformerType: ['', Validators.required],
       designType: ['', Validators.required]
-    })
+    });
     this.route.params.subscribe(params => {
       if (params['projectUniqueId']) {
         this.isEditMode = true;
@@ -61,7 +71,7 @@ export class ProjectCreateFormComponent implements OnInit {
   }
 
   generate(): void {
-    const assemblyPath = "D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.iam";
+    const assemblyPath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.iam';
 
     this.generateService.createFolder('PC0300949_01_01').subscribe({
       next: (response) => {
@@ -86,7 +96,7 @@ export class ProjectCreateFormComponent implements OnInit {
             console.log('Assembly opened successfully:', assemblyResponse);
             alert(assemblyResponse.message);
 
-            const partFilePath = "D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt";
+            const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
             const parameters = this.tankInventorPayload;
 
             this.assemblyService.changeParameters(partFilePath, parameters).subscribe({
@@ -137,6 +147,7 @@ export class ProjectCreateFormComponent implements OnInit {
               this.transformerDetailsForm.disable();
               this.tankSection = true;
               this.lvTrunkingVisible = true;
+              this.topCoverVisible = true;
               this.transformerSaveButtonVisibility = true;
 
             },
@@ -151,8 +162,11 @@ export class ProjectCreateFormComponent implements OnInit {
               this.transformerDetailsForm.disable();
               this.tankSection = true;
               this.lvTrunkingVisible = true;
+              this.topCoverVisible = true;
               this.transformerSaveButtonVisibility = true;
               this.generateTankSuppressionDetails();
+              this.generateLVTrunkingSuppressionDetails();
+              this.generateTopCoverSuppressionDetails();
             },
             error: () => {
             }
@@ -178,8 +192,11 @@ export class ProjectCreateFormComponent implements OnInit {
           this.transformerConfigService.getTransformerConfigDetailsById(String(this.projectUniqueId)).subscribe({
             next: (transformerConfigData) => {
               this.tankDetailsData = transformerConfigData.tankDetails;
+              this.lvTrunkingDetailsData = transformerConfigData.lvTrunkingDetails;
+              this.topCoverDetailsData = transformerConfigData.topCoverDetails;
               this.tankSection = true;
               this.lvTrunkingVisible = true;
+              this.topCoverVisible = true;
             },
             error: (error) => {
               // Handle error (show error message to user)
@@ -210,7 +227,7 @@ export class ProjectCreateFormComponent implements OnInit {
       const updatedData = {
         tankDetails: JSON.stringify(formData),
         projectUniqueId: this.generatedProjectUniqueId ? this.generatedProjectUniqueId : (this.projectUniqueId ? this.projectUniqueId : ''),
-      }
+      };
 
       if (this.isEditMode && this.projectUniqueId) {
         this.transformerConfigService.updateTransformerConfigDetails(this.projectUniqueId, updatedData)
@@ -238,36 +255,120 @@ export class ProjectCreateFormComponent implements OnInit {
   }
 
   handleLVTrunkingDetailsFormSubmit(formData: any): void {
+    this.lvTrunkingDetailsData = formData;
+
+    if (formData) {
+      const updatedData = {
+        lvTrunkingDetails: JSON.stringify(formData),
+        projectUniqueId: this.generatedProjectUniqueId ? this.generatedProjectUniqueId : (this.projectUniqueId ? this.projectUniqueId : ''),
+      };
+
+      if (this.isEditMode && this.projectUniqueId) {
+        this.transformerConfigService.updateTransformerConfigDetails(this.projectUniqueId, updatedData)
+          .subscribe({
+            next: () => {
+              this.generateLVTrunkingSuppressionDetails();
+            },
+            error: () => {
+              // Handle error (show error message to user)
+            }
+          });
+      } else {
+        this.transformerConfigService.saveTransformerConfigDetails(updatedData)
+          .subscribe({
+            next: () => {
+
+              this.generateLVTrunkingSuppressionDetails();
+            },
+            error: () => {
+            }
+          });
+      }
+    }
+
   }
 
   handleTopcoverDetailsFormSubmit(formData: any): void {
     this.topCoverDetailsData = formData;
+    if (formData) {
+      const updatedData = {
+        topCoverDetails: JSON.stringify(formData),
+        projectUniqueId: this.generatedProjectUniqueId ? this.generatedProjectUniqueId : (this.projectUniqueId ? this.projectUniqueId : ''),
+      };
+
+      if (this.isEditMode && this.projectUniqueId) {
+        this.transformerConfigService.updateTransformerConfigDetails(this.projectUniqueId, updatedData)
+          .subscribe({
+            next: () => {
+              this.generateTopCoverSuppressionDetails();
+            },
+            error: () => {
+              // Handle error (show error message to user)
+            }
+          });
+      } else {
+        this.transformerConfigService.saveTransformerConfigDetails(updatedData)
+          .subscribe({
+            next: () => {
+
+              this.generateTopCoverSuppressionDetails();
+            },
+            error: () => {
+            }
+          });
+      }
+    }
+
   }
 
   handleTankPayloads(event: any[]): void {
     this.tankDBPayload = event.flatMap(imageData => imageData.allDimensions);
     this.tankInventorPayload = event.flatMap(imageData => imageData.modifiedFields);
-
-    console.log("Merged allDimensions:", this.tankDBPayload);
-    console.log("Merged modifiedFields:", this.tankInventorPayload);
   }
 
   handleLVTrunkingPayloads(event: any[]): void {
-
+    this.lvTrunkingDBPayload = event.flatMap(imageData => imageData.allDimensions);
+    this.lvTrunkingInventorPayload = event.flatMap(imageData => imageData.modifiedFields);
+  }
+  handleTopCoverPayloads(event: any[]): void {
+    this.topCoverDBPayload = event.flatMap(imageData => imageData.allDimensions);
+    this.topCoverInventorPayload = event.flatMap(imageData => imageData.modifiedFields);
   }
 
   createdProjectUniqueId(event: any) {
-    this.generatedProjectUniqueId = event
+    this.generatedProjectUniqueId = event;
   }
 
   generateTankSuppressionDetails() {
-    this.generateService.getSuppressionData(this.tankDetailsData, this.transformerName).subscribe((suppressionData: any) => {
+    this.generateService.getSuppressionData(this.tankDetailsData, this.transformerName, 'tankConfigurations').subscribe((suppressionData: any) => {
       console.log('Generated Suppression Data:', suppressionData);
-      this.tankSuppressionData = suppressionData
+      this.tankSuppressionData = suppressionData;
+    });
+    this.generateService.getIpartsIassembliesData(this.tankDetailsData, this.transformerName, 'tankConfigurations').subscribe((ipartsIassemblies: any) => {
+      console.log('Generated IpartsIassemblies Data:', ipartsIassemblies);
+      this.tankIpartsIassembliesData = ipartsIassemblies;
+    });
+  }
 
-      // this.generateService.sendSuppressionData(suppressionData).subscribe((response: any) => {
-      //   console.log('Suppression Response:', response);
-      // });
+  generateLVTrunkingSuppressionDetails() {
+    this.generateService.getSuppressionData(this.lvTrunkingDetailsData, this.transformerName, 'lvTrunckingConfigurations').subscribe((suppressionData: any) => {
+      console.log('Generated Suppression Data:', suppressionData);
+      this.lvTrunkingSuppressionData = suppressionData;
+    });
+    this.generateService.getIpartsIassembliesData(this.lvTrunkingDetailsData, this.transformerName, 'lvTrunckingConfigurations').subscribe((ipartsIassemblies: any) => {
+      console.log('Generated IpartsIassemblies Data:', ipartsIassemblies);
+      this.lvTrunkingIpartsIassembliesData = ipartsIassemblies;
+    });
+  }
+
+  generateTopCoverSuppressionDetails() {
+    this.generateService.getSuppressionData(this.topCoverDetailsData, this.transformerName, 'topCoverConfigurations').subscribe((suppressionData: any) => {
+      console.log('Generated Suppression Data:', suppressionData);
+      this.topCoverSuppressionData = suppressionData;
+    });
+    this.generateService.getIpartsIassembliesData(this.topCoverDetailsData, this.transformerName, 'topCoverConfigurations').subscribe((ipartsIassemblies: any) => {
+      console.log('Generated IpartsIassemblies Data:', ipartsIassemblies);
+      this.topCoverIpartsIassembliesData = ipartsIassemblies;
     });
   }
 }

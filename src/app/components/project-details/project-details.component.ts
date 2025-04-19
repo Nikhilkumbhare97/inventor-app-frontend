@@ -57,7 +57,7 @@ export class ProjectDetailsComponent implements OnChanges {
         });
         this.projectDataLoaded.emit(true);
       },
-      error: (error) => console.error("❌ Error fetching project data:", error)
+      error: (error) => console.error('❌ Error fetching project data:', error)
     });
   }
 
@@ -85,10 +85,10 @@ export class ProjectDetailsComponent implements OnChanges {
 
     saveOperation.subscribe({
       next: (data) => {
-        this.createdProjectUniqueId.emit(data.projectUniqueId)
+        this.createdProjectUniqueId.emit(data.projectUniqueId);
         this.showTransformerDetails();
       },
-      error: (error) => console.error("❌ Error saving project:", error)
+      error: (error) => console.error('❌ Error saving project:', error)
     });
   }
 

@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class HomeComponent {
   activeTab = 'users';
 
-  constructor(private router: Router) { };
+  constructor(private router: Router) { }
 
   setActiveTab(tab: string) {
     this.activeTab = tab;

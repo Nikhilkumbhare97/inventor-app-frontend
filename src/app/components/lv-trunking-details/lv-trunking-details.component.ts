@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, of } from 'rxjs';
+import { catchError, of } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 
 interface FieldConfig {
@@ -28,7 +28,7 @@ interface Configuration {
 export class LvTrunkingDetailsComponent implements OnChanges {
   @ViewChild('svgContainer', { static: false }) svgContainer!: ElementRef;
   @Input() lvTrunkingVisible = false;
-  @Input() lvTrunckingDetailsData: any = {};
+  @Input() lvTrunkingDetailsData: any = {};
   @Input() isEditMode = false;
   @Input() topCoverVisible = false;
   @Input() transformerName = '';
@@ -43,8 +43,6 @@ export class LvTrunkingDetailsComponent implements OnChanges {
   constructor(private fb: FormBuilder, private http: HttpClient, private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.isEditMode = false;
-    console.log('lvTrunkingVisible', this.lvTrunkingVisible)
     this.lvTrunckingDetailsForm = this.fb.group({});
     if (this.lvTrunkingVisible) {
       this.loadConfiguration(this.transformerName);
@@ -62,7 +60,6 @@ export class LvTrunkingDetailsComponent implements OnChanges {
     this.http.get<Configuration>(`assets/configurations/lvTrunckingConfigurations/${transformerName}.json`)
       .pipe(
         catchError(error => {
-          console.error("Error loading configuration:", error);
           return of(null);
         })
       )
@@ -87,16 +84,15 @@ export class LvTrunkingDetailsComponent implements OnChanges {
     });
 
     this.lvTrunckingDetailsForm = this.fb.group(formGroup);
-    console.log('this.lvTrunckingDetailsForm', this.lvTrunckingDetailsForm)
-    //this.patchlvTrunckingDetailsForm(); // Ensure form gets data if available
+    this.patchlvTrunckingDetailsForm(); // Ensure form gets data if available
   }
 
   private patchlvTrunckingDetailsForm(): void {
-    if (this.isEditMode && this.lvTrunckingDetailsData && this.lvTrunckingDetailsForm) {
+    if (this.isEditMode && this.lvTrunkingDetailsData && this.lvTrunckingDetailsForm) {
       try {
-        const parsedData = typeof this.lvTrunckingDetailsData === 'string'
-          ? JSON.parse(this.lvTrunckingDetailsData)
-          : this.lvTrunckingDetailsData;
+        const parsedData = typeof this.lvTrunkingDetailsData === 'string'
+          ? JSON.parse(this.lvTrunkingDetailsData)
+          : this.lvTrunkingDetailsData;
 
         this.lvTrunckingDetailsForm.patchValue(parsedData);
         this.cdRef.detectChanges();

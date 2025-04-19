@@ -25,7 +25,7 @@
         </div>
     </mat-card>
 
-    <mat-accordion>
+    <!-- <mat-accordion>
         <div *ngIf="tankDetailsForm.get('tankType')?.value">
             <mat-expansion-panel *ngFor="let imageName of imageList" class="tank-part">
                 <mat-expansion-panel-header>
@@ -36,6 +36,27 @@
                 </app-editable-svg>
             </mat-expansion-panel>
         </div>
-    </mat-accordion>
+    </mat-accordion> -->
+
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item" *ngIf="tankDetailsForm.get('tankType')?.value">
+            <div class="accordion-item" *ngFor="let imageName of imageList">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        [attr.data-bs-target]="'#collapse' + imageName" aria-expanded="true"
+                        [attr.aria-controls]="'collapse' + imageName">
+                        {{ imageName }}
+                    </button>
+                </h2>
+                <div [id]="'collapse' + imageName" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        <app-editable-svg [imageName]="imageName" [inputOnlyMode]="true"
+                            (modifiedData)="handleModifiedData($event, imageName)">
+                        </app-editable-svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </form>

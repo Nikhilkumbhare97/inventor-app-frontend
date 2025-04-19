@@ -44,7 +44,7 @@ body {
     margin-top: 20px;
 }
 
-button {
+.button-row button {
     margin-left: 10px;
 }
 
@@ -97,9 +97,64 @@ input[type="text"] {
     border: 1px solid var(--highlight-bg);
 }
 
-/* Align Save Button to the Right */
-.save-modified {
+.accordion {
+    background-color: var(--accent-bg);
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: none;
+    /* Removing shadow for a flat design */
+    border: 1px solid var(--highlight-bg);
+    /* Matching mat-expansion-panel border */
+    color: white;
+}
+
+.accordion-item {
+    border: none;
+}
+
+.accordion-header {
+    background-color: var(--highlight-bg);
+    /* Matches mat-expansion-panel-header */
+    font-weight: bold;
+    color: var(--font-color);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 1rem;
+    /* Adding hover effect */
+}
+
+.accordion-button {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 1rem;
+    align-items: center;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: var(--font-color);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    /* ensures padding is included in width */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.accordion-button:hover {
+    background-color: rgba(67, 85, 133, 0.7);
+}
+
+.accordion-collapse {
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: var(--secondary-bg);
+    /* Matches mat-expansion-panel content background */
+}
+
+.accordion-body {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    color: white;
 }

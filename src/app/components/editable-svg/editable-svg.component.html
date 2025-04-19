@@ -17,7 +17,7 @@
         <div *ngFor="let dim of svgData?.dimensions" class="draggable" cdkDrag
             [ngStyle]="{'top': dim.y + 'rem', 'left': dim.x + 'rem'}" (cdkDragEnded)="onDragEnd($event, dim)">
             <input type="number" [(ngModel)]="dim.defaultValue" />
-            <span>{{ dim.label }}</span>
+            <span class="parameter-label">{{ dim.label }}</span>
         </div>
     </div>
 

@@ -59,7 +59,6 @@ export class TankDetailsComponent implements OnChanges {
     this.http.get<Configuration>(`assets/configurations/tankConfigurations/${transformerName}.json`)
       .pipe(
         catchError(error => {
-          console.error("Error loading configuration:", error);
           return of(null);
         })
       )

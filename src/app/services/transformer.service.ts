@@ -18,7 +18,7 @@ export class TransformerService {
     }
 
     updateTransformerDetails(projectUniqueId: string, transformerDetails: any): Observable<any> {
-        console.log('transformerDetails', transformerDetails)
+        console.log('transformerDetails', transformerDetails);
         return this.http.put<any>(`${this.apiUrl}/${projectUniqueId}`, transformerDetails)
             .pipe(catchError(this.handleError)); // Handle errors
     }

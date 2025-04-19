@@ -1,0 +1,46 @@
+{
+    "fields": [
+        {
+            "type": "dropdown",
+            "name": "topCoverType",
+            "label": "Top Cover Type",
+            "options": [
+                {
+                    "value": "Type1",
+                    "label": "Type1"
+                },
+                {
+                    "value": "Type2",
+                    "label": "Type2"
+                }
+            ],
+            "validators": [
+                "required"
+            ],
+            "defaultValue": "Type1"
+        },
+        {
+            "type": "dropdown",
+            "name": "jobLocking",
+            "label": "Job Locing Pocket",
+            "options": [
+                {
+                    "value": "2",
+                    "label": "2"
+                },
+                {
+                    "value": "3",
+                    "label": "3"
+                }
+            ],
+            "validators": [
+                "required"
+            ],
+            "defaultValue": "2"
+        }
+    ],
+    "images": [
+        "66kv_06",
+        "66kv_07"
+    ]
+}

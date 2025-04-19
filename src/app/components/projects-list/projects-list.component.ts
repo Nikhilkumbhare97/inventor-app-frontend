@@ -24,7 +24,7 @@ export class ProjectsListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.selectedStatus = ['Active']
+    this.selectedStatus = ['Active'];
     this.loadProjects();
   }
 

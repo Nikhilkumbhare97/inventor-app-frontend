@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs'; // Import of and throwError
 import { map, catchError, tap } from 'rxjs/operators'; // Import catchError
 import { environment } from '../../environments/environment';
@@ -20,20 +20,20 @@ export class GenerateService {
             );
     }
 
-    getSuppressionData(tankDetails: any, transformerName: string): Observable<any> {
-        return this.http.get<any>(`assets/suppress-configurations/tankConfigurations/${transformerName}.json`).pipe(
+    getSuppressionData(sectionDetails: any, transformerName: string, config: string): Observable<any> {
+        return this.http.get<any>(`assets/suppress-configurations/${config}/${transformerName}.json`).pipe(
             map(config => {
-                let suppressActions: any[] = [];
-                let assembliesMap = new Map<string, Set<string>>();
+                const suppressActions: any[] = [];
+                const assembliesMap = new Map<string, Set<string>>();
 
                 if (!config) {
                     console.warn(`No configuration found for transformer: ${transformerName}`);
                     return { suppressActions }; // Return empty array
                 }
 
-                // Loop through tankDetails and fetch suppression components
-                Object.keys(tankDetails).forEach(key => {
-                    let selectedValue = tankDetails[key];
+                // Loop through sectionDetails and fetch suppression components
+                Object.keys(sectionDetails).forEach(key => {
+                    const selectedValue = sectionDetails[key];
 
                     if (config[key] && config[key][selectedValue]) {
                         Object.keys(config[key][selectedValue]).forEach(assembly => {
@@ -62,6 +62,59 @@ export class GenerateService {
             catchError(error => {
                 console.error('Error fetching suppression config:', error);
                 return of({ suppressActions: [] }); // Return empty array if an error occurs
+            })
+        );
+    }
+
+    getIpartsIassembliesData(sectionDetails: any, transformerName: string, config: string): Observable<any> {
+        return this.http.get<any>(`assets/ipart-iassembly-configurations/${config}/${transformerName}.json`).pipe(
+            map(config => {
+                const iPartsIAssemblies: any[] = [];
+                const assembliesMap = new Map<string, Map<string, string>>();
+
+                if (!config) {
+                    console.warn(`No configuration found for transformer: ${transformerName}`);
+                    return { iPartsIAssemblies };
+                }
+
+                // Loop through top-level config keys (e.g., "flangeType#flangeMaterial")
+                for (const configKey of Object.keys(config)) {
+                    const keyParts = configKey.split('#'); // e.g., ['flangeType', 'flangeMaterial']
+
+                    // Build combined value from sectionDetails (e.g., "Type1#MS & Steel")
+                    const combinedValue = keyParts.map(key => sectionDetails[key]).join('#');
+
+                    const matchedConfig = config[configKey][combinedValue];
+                    if (!matchedConfig) continue;
+
+                    // Process assemblies
+                    for (const assembly of Object.keys(matchedConfig)) {
+                        if (!assembliesMap.has(assembly)) {
+                            assembliesMap.set(assembly, new Map<string, string>());
+                        }
+
+                        matchedConfig[assembly].forEach((component: string) => {
+                            const [instance, member] = component.split('#');
+                            if (instance && member) {
+                                assembliesMap.get(assembly)?.set(instance, member);
+                            }
+                        });
+                    }
+                }
+
+                // Convert Map to array format
+                assembliesMap.forEach((componentsMap, assemblyFilePath) => {
+                    iPartsIAssemblies.push({
+                        assemblyFilePath,
+                        iPartsIAssemblies: Object.fromEntries(componentsMap)
+                    });
+                });
+
+                return { iPartsIAssemblies };
+            }),
+            catchError(error => {
+                console.error('Error fetching suppression config:', error);
+                return of({ iPartsIAssemblies: [] });
             })
         );
     }

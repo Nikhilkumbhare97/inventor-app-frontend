@@ -37,7 +37,7 @@ export class EditableSvgComponent implements OnInit {
         this.images = response;
       },
       (error) => {
-        alert(error)
+        alert(error);
       }
     );
   }
@@ -58,7 +58,7 @@ export class EditableSvgComponent implements OnInit {
         }
       },
       (error) => {
-        alert(error)
+        alert(error);
       }
     );
   }

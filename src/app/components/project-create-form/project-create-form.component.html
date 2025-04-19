@@ -45,14 +45,18 @@
 </div>
 
 <div *ngIf="lvTrunkingVisible">
-    <app-lv-trunking-details [transformerName]="transformerName" [isEditMode]="isEditMode"
-        [lvTrunkingVisible]="lvTrunkingVisible"
+    <app-lv-trunking-details [transformerName]="transformerName" [lvTrunkingDetailsData]="lvTrunkingDetailsData"
+        [isEditMode]="isEditMode" [lvTrunkingVisible]="lvTrunkingVisible"
         (lvTrunckingDetailsformSubmit)="handleLVTrunkingDetailsFormSubmit($event)"
         (lvTrunckingPayloads)="handleLVTrunkingPayloads($event)"></app-lv-trunking-details>
 </div>
 
-<app-top-cover-details [topCoverVisible]="topCoverVisible"
-    (topCoverFormSubmit)="handleTopcoverDetailsFormSubmit($event)"></app-top-cover-details>
+<div *ngIf="topCoverVisible">
+    <app-top-cover-details [transformerName]="transformerName" [topCoverDetailsData]="topCoverDetailsData"
+        [isEditMode]="isEditMode" [topCoverVisible]="topCoverVisible"
+        (topCoverFormSubmit)="handleTopcoverDetailsFormSubmit($event)"
+        (topCoverPayloads)="handleTopCoverPayloads($event)"></app-top-cover-details>
+</div>
 
 <button mat-raised-button color="primary"
     *ngIf="transformerDetailsForm.get('designType')?.value === 'Non-standard' && tankDetailsData && tankInventorPayload"

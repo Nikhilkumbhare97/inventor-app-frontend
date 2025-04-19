@@ -10,7 +10,7 @@ export class HeaderComponent {
 
   menuOpen = false;
   userMenuOpen = false;
-  constructor(private router: Router) { };
+  constructor(private router: Router) { }
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;

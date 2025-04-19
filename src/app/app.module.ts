@@ -36,6 +36,9 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
 import { StatusDialogComponent } from './components/status-dialog/status-dialog.component';
 import { EditableSvgComponent } from './components/editable-svg/editable-svg.component';
 import { LvTrunkingDetailsComponent } from './components/lv-trunking-details/lv-trunking-details.component';
+import { HvLvTurretDetailsComponent } from './components/hv-lv-turret-details/hv-lv-turret-details.component';
+import { ConservatorSupportDetailsComponent } from './components/conservator-support-details/conservator-support-details.component';
+import { ConservatorDetailsComponent } from './components/conservator-details/conservator-details.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +54,10 @@ import { LvTrunkingDetailsComponent } from './components/lv-trunking-details/lv-
     ConfirmationDialogComponent,
     StatusDialogComponent,
     EditableSvgComponent,
-    LvTrunkingDetailsComponent
+    LvTrunkingDetailsComponent,
+    HvLvTurretDetailsComponent,
+    ConservatorSupportDetailsComponent,
+    ConservatorDetailsComponent
   ],
   imports: [
     BrowserModule,

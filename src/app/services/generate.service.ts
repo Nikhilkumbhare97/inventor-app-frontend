@@ -119,6 +119,21 @@ export class GenerateService {
         );
     }
 
+    getModelStateRepresentation(sectionDetails: any, transformerName: string): Observable<any> {
+        return this.http.get<any>(`assets/model-state-configurations/${transformerName}.json`).pipe(
+            map(config => {
+                const tankType = sectionDetails?.tankType;
+                const modelStateObj = config[tankType] || [];
+
+                return { modelStateObj };
+            }),
+            catchError(error => {
+                console.error('Error fetching model state config:', error);
+                return of({ modelStateObj: [] });
+            })
+        );
+    }
+
     private handleError(error: any) {
         console.error('API error occurred:', error);
 

@@ -10,8 +10,8 @@
                     "label": "LV cable RH side"
                 },
                 {
-                    "value": "LV cable LH side",
-                    "label": "LV cable LH side"
+                    "value": "LV cable LV side",
+                    "label": "LV cable LV side"
                 },
                 {
                     "value": "No LV cable box",

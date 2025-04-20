@@ -58,6 +58,29 @@
         (topCoverPayloads)="handleTopCoverPayloads($event)"></app-top-cover-details>
 </div>
 
-<button mat-raised-button color="primary"
-    *ngIf="transformerDetailsForm.get('designType')?.value === 'Non-standard' && tankDetailsData && tankInventorPayload"
-    (click)="generate()">Generate</button>
+<div *ngIf="lvhvTurretVisible">
+    <app-hv-lv-turret-details [transformerName]="transformerName" [lvhvTurretDetailsData]="lvhvTurretDetailsData"
+        [isEditMode]="isEditMode" [lvhvTurretVisible]="lvhvTurretVisible"
+        (lvhvTurretFormSubmit)="handlelvhvTurretDetailsFormSubmit($event)"
+        (lvhvTurretPayloads)="handlelvhvTurretPayloads($event)"></app-hv-lv-turret-details>
+</div>
+
+<div *ngIf="conservatorSupportVisible">
+    <app-conservator-support-details [transformerName]="transformerName"
+        [conservatorSupportDetailsData]="conservatorSupportDetailsData" [isEditMode]="isEditMode"
+        [conservatorSupportVisible]="conservatorSupportVisible"
+        (conservatorSupportFormSubmit)="handleConservatorSupportDetailsFormSubmit($event)"
+        (conservatorSupportPayloads)="handleConservatorSupportPayloads($event)"></app-conservator-support-details>
+</div>
+
+<div *ngIf="conservatorVisible">
+    <app-conservator-details [transformerName]="transformerName" [conservatorDetailsData]="conservatorDetailsData"
+        [isEditMode]="isEditMode" [conservatorVisible]="conservatorVisible"
+        (conservatorFormSubmit)="handleConservatorDetailsFormSubmit($event)"
+        (conservatorPayloads)="handleConservatorPayloads($event)"></app-conservator-details>
+</div>
+
+<div class="button-gen"
+    *ngIf="transformerDetailsForm.get('designType')?.value === 'Non-standard' && (tankDetailsData && lvTrunkingDetailsData && topCoverDetailsData) || (tankInventorPayload || lvTrunkingInventorPayload || topCoverInventorPayload || lvhvTurretInventorPayload || conservatorSupportInventorPayload || conservatorInventorPayload)">
+    <button mat-raised-button color="primary" (click)="generate()">Generate</button>
+</div>

@@ -1,0 +1,45 @@
+{
+    "fields": [
+        {
+            "type": "dropdown",
+            "name": "kv",
+            "label": "KV",
+            "options": [
+                {
+                    "value": "66",
+                    "label": "66"
+                },
+                {
+                    "value": "132",
+                    "label": "132"
+                }
+            ],
+            "validators": [
+                "required"
+            ],
+            "defaultValue": "66"
+        },
+        {
+            "type": "dropdown",
+            "name": "amp",
+            "label": "AMP",
+            "options": [
+                {
+                    "value": "210",
+                    "label": "210"
+                },
+                {
+                    "value": "420",
+                    "label": "420"
+                }
+            ],
+            "validators": [
+                "required"
+            ],
+            "defaultValue": "210"
+        }
+    ],
+    "images": [
+        "66kv_08"
+    ]
+}

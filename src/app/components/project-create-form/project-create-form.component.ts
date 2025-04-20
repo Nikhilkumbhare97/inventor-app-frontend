@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { GenerateService } from '../../services/generate.service';
 import { AssemblyService } from '../../services/assembly.service';
@@ -18,26 +17,45 @@ export class ProjectCreateFormComponent implements OnInit {
   tankSection = false;
   lvTrunkingVisible = false;
   topCoverVisible = false;
+  lvhvTurretVisible = false;
+  conservatorSupportVisible = false;
+  conservatorVisible = false;
   tankDetailsData: any;
   lvTrunkingDetailsData: any;
   topCoverDetailsData: any;
+  lvhvTurretDetailsData: any;
+  conservatorSupportDetailsData: any;
+  conservatorDetailsData: any;
   isEditMode = false;
   projectUniqueId: string | null = null;
   tankDBPayload: any;
   lvTrunkingDBPayload: any;
   topCoverDBPayload: any;
+  lvhvTurretDBPayload: any;
+  conservatorSupportDBPayload: any;
+  conservatorDBPayload: any;
   tankInventorPayload: any;
   lvTrunkingInventorPayload: any;
   topCoverInventorPayload: any;
+  lvhvTurretInventorPayload: any;
+  conservatorSupportInventorPayload: any;
+  conservatorInventorPayload: any;
   transformerSaveButtonVisibility: boolean = true;
   generatedProjectUniqueId: string | null = null;
-  transformerName: any = '66KV';
+  transformerName: any = '';
   tankSuppressionData: any = {};
   lvTrunkingSuppressionData: any = {};
   topCoverSuppressionData: any = {};
+  lvhvTurretSuppressionData: any = {};
+  conservatorSupportSuppressionData: any = {};
+  conservatorSuppressionData: any = {};
   tankIpartsIassembliesData: any = {};
   lvTrunkingIpartsIassembliesData: any = {};
   topCoverIpartsIassembliesData: any = {};
+  lvhvTurretIpartsIassembliesData: any = {};
+  conservatorSupportIpartsIassembliesData: any = {};
+  conservatorIpartsIassembliesData: any = {};
+  modelRepresentationData: any = {};
 
   constructor(
     private fb: FormBuilder,
@@ -73,59 +91,104 @@ export class ProjectCreateFormComponent implements OnInit {
   generate(): void {
     const assemblyPath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.iam';
 
+
+
+    const suppressionsPayload = {
+      suppressActions: [
+        ...(this.tankSuppressionData?.suppressActions || []),
+        ...(this.lvTrunkingSuppressionData?.suppressActions || []),
+        ...(this.topCoverSuppressionData?.suppressActions || []),
+        ...(this.lvhvTurretSuppressionData?.suppressActions || []),
+        ...(this.conservatorSupportSuppressionData?.suppressActions || []),
+        ...(this.conservatorSuppressionData?.suppressActions || [])
+      ]
+    };
+
+    const ipartsiassembliesPayload = {
+      assemblyUpdates: [
+        ...(this.tankIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.lvTrunkingIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.topCoverIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.lvhvTurretIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.conservatorSupportIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.conservatorIpartsIassembliesData?.iPartsIAssemblies || [])
+      ]
+    };
+
+    // this.generateService.createFolder('PC0300949_01_01').subscribe({
+    //   next: (response) => {
+    //     console.log('Folder creation response:', response);
+    //     // Now calling openAssembly
+    //     this.assemblyService.openAssembly(assemblyPath).subscribe({
+    //       next: (assemblyResponse) => {
+    //         console.log('Assembly opened successfully:', assemblyResponse);
+    //         alert(assemblyResponse.message);
+    //       },
+    //       error: (assemblyError) => {
+    //         console.error('Error opening assembly:', assemblyError);
+    //         alert('Failed to open assembly.');
+    //       }
+    //     });
+    //   },
+    //   error: (error) => {
+    //     console.error('Error creating folder:', error);
+    //     alert('Failed to create folder');
+    //     this.assemblyService.openAssembly(assemblyPath).subscribe({
+    //       next: (assemblyResponse) => {
+    //         console.log('Assembly opened successfully:', assemblyResponse);
+    //         alert(assemblyResponse.message);
+
+    //         const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
+    //         const parameters = parametersPayload;
+
+    //         this.assemblyService.changeParameters(partFilePath, parameters).subscribe({
+    //           next: response => {
+    //             console.log('Success:', response);
+    //             alert(response.message);
+
+    //             this.assemblyService.suppressComponents(this.tankSuppressionData).subscribe({
+    //               next: response => {
+    //                 console.log('Success:', response);
+    //                 alert(response.message);
+    //               },
+    //               error: error => {
+    //                 console.error('Error:', error);
+    //                 alert('Failed to suppress components.');
+    //               }
+    //             });
+    //           },
+    //           error: error => {
+    //             console.error('Error:', error);
+    //             alert('Failed to update parameters.');
+    //           }
+    //         });
+    //       },
+    //       error: (assemblyError) => {
+    //         console.error('Error opening assembly:', assemblyError);
+    //         alert('Failed to open assembly.');
+    //       }
+    //     });
+    //   }
+    // });
+
     this.generateService.createFolder('PC0300949_01_01').subscribe({
       next: (response) => {
-        console.log('Folder creation response:', response);
-        // Now calling openAssembly
-        this.assemblyService.openAssembly(assemblyPath).subscribe({
-          next: (assemblyResponse) => {
-            console.log('Assembly opened successfully:', assemblyResponse);
-            alert(assemblyResponse.message);
-          },
-          error: (assemblyError) => {
-            console.error('Error opening assembly:', assemblyError);
-            alert('Failed to open assembly.');
-          }
-        });
+        if (response.status === 200) {
+          alert(response.body.message);  // Success
+          this.updateModelStateandRepresentations();
+        }
       },
       error: (error) => {
-        console.error('Error creating folder:', error);
-        alert('Failed to create folder');
-        this.assemblyService.openAssembly(assemblyPath).subscribe({
-          next: (assemblyResponse) => {
-            console.log('Assembly opened successfully:', assemblyResponse);
-            alert(assemblyResponse.message);
-
-            const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
-            const parameters = this.tankInventorPayload;
-
-            this.assemblyService.changeParameters(partFilePath, parameters).subscribe({
-              next: response => {
-                console.log('Success:', response);
-                alert(response.message);
-
-                this.assemblyService.suppressComponents(this.tankSuppressionData).subscribe({
-                  next: response => {
-                    console.log('Success:', response);
-                    alert(response.message);
-                  },
-                  error: error => {
-                    console.error('Error:', error);
-                    alert('Failed to suppress components.');
-                  }
-                });
-              },
-              error: error => {
-                console.error('Error:', error);
-                alert('Failed to update parameters.');
-              }
-            });
-          },
-          error: (assemblyError) => {
-            console.error('Error opening assembly:', assemblyError);
-            alert('Failed to open assembly.');
-          }
-        });
+        if (error.status === 409) {
+          alert("Folder already exists.");
+          this.updateModelStateandRepresentations();
+        } else if (error.status === 400) {
+          alert("Source folder does not exist.");
+        } else if (error.status === 500) {
+          alert(error.error?.message || "Server error during folder copy.");
+        } else {
+          alert("Unexpected error occurred.");
+        }
       }
     });
   }
@@ -148,6 +211,9 @@ export class ProjectCreateFormComponent implements OnInit {
               this.tankSection = true;
               this.lvTrunkingVisible = true;
               this.topCoverVisible = true;
+              this.lvhvTurretVisible = true;
+              this.conservatorSupportVisible = true;
+              this.conservatorVisible = true;
               this.transformerSaveButtonVisibility = true;
 
             },
@@ -163,10 +229,16 @@ export class ProjectCreateFormComponent implements OnInit {
               this.tankSection = true;
               this.lvTrunkingVisible = true;
               this.topCoverVisible = true;
+              this.lvhvTurretVisible = true;
+              this.conservatorSupportVisible = true;
+              this.conservatorVisible = true;
               this.transformerSaveButtonVisibility = true;
               this.generateTankSuppressionDetails();
               this.generateLVTrunkingSuppressionDetails();
               this.generateTopCoverSuppressionDetails();
+              this.generateLVHVTurretSuppressionDetails();
+              this.generateConservatorSupportSuppressionDetails();
+              this.generateConservatorSuppressionDetails();
             },
             error: () => {
             }
@@ -194,9 +266,15 @@ export class ProjectCreateFormComponent implements OnInit {
               this.tankDetailsData = transformerConfigData.tankDetails;
               this.lvTrunkingDetailsData = transformerConfigData.lvTrunkingDetails;
               this.topCoverDetailsData = transformerConfigData.topCoverDetails;
+              this.lvhvTurretDetailsData = transformerConfigData.lvHvTurretDetails;
+              this.conservatorSupportDetailsData = transformerConfigData.conservatorSupportDetails;
+              this.conservatorDetailsData = transformerConfigData.conservatorDetails;
               this.tankSection = true;
               this.lvTrunkingVisible = true;
               this.topCoverVisible = true;
+              this.lvhvTurretVisible = true;
+              this.conservatorSupportVisible = true;
+              this.conservatorVisible = true;
             },
             error: (error) => {
               // Handle error (show error message to user)
@@ -321,6 +399,102 @@ export class ProjectCreateFormComponent implements OnInit {
 
   }
 
+  handlelvhvTurretDetailsFormSubmit(formData: any): void {
+    this.lvhvTurretDetailsData = formData;
+    if (formData) {
+      const updatedData = {
+        lvHvTurretDetails: JSON.stringify(formData),
+        projectUniqueId: this.generatedProjectUniqueId ? this.generatedProjectUniqueId : (this.projectUniqueId ? this.projectUniqueId : ''),
+      };
+
+      if (this.isEditMode && this.projectUniqueId) {
+        this.transformerConfigService.updateTransformerConfigDetails(this.projectUniqueId, updatedData)
+          .subscribe({
+            next: () => {
+              this.generateLVHVTurretSuppressionDetails();
+            },
+            error: () => {
+              // Handle error (show error message to user)
+            }
+          });
+      } else {
+        this.transformerConfigService.saveTransformerConfigDetails(updatedData)
+          .subscribe({
+            next: () => {
+
+              this.generateLVHVTurretSuppressionDetails();
+            },
+            error: () => {
+            }
+          });
+      }
+    }
+  }
+
+  handleConservatorSupportDetailsFormSubmit(formData: any): void {
+    this.conservatorSupportDetailsData = formData;
+    if (formData) {
+      const updatedData = {
+        conservatorSupportDetails: JSON.stringify(formData),
+        projectUniqueId: this.generatedProjectUniqueId ? this.generatedProjectUniqueId : (this.projectUniqueId ? this.projectUniqueId : ''),
+      };
+
+      if (this.isEditMode && this.projectUniqueId) {
+        this.transformerConfigService.updateTransformerConfigDetails(this.projectUniqueId, updatedData)
+          .subscribe({
+            next: () => {
+              this.generateConservatorSupportSuppressionDetails();
+            },
+            error: () => {
+              // Handle error (show error message to user)
+            }
+          });
+      } else {
+        this.transformerConfigService.saveTransformerConfigDetails(updatedData)
+          .subscribe({
+            next: () => {
+
+              this.generateConservatorSupportSuppressionDetails();
+            },
+            error: () => {
+            }
+          });
+      }
+    }
+  }
+
+  handleConservatorDetailsFormSubmit(formData: any): void {
+    this.conservatorDetailsData = formData;
+    if (formData) {
+      const updatedData = {
+        conservatoDetails: JSON.stringify(formData),
+        projectUniqueId: this.generatedProjectUniqueId ? this.generatedProjectUniqueId : (this.projectUniqueId ? this.projectUniqueId : ''),
+      };
+
+      if (this.isEditMode && this.projectUniqueId) {
+        this.transformerConfigService.updateTransformerConfigDetails(this.projectUniqueId, updatedData)
+          .subscribe({
+            next: () => {
+              this.generateConservatorSuppressionDetails();
+            },
+            error: () => {
+              // Handle error (show error message to user)
+            }
+          });
+      } else {
+        this.transformerConfigService.saveTransformerConfigDetails(updatedData)
+          .subscribe({
+            next: () => {
+
+              this.generateConservatorSuppressionDetails();
+            },
+            error: () => {
+            }
+          });
+      }
+    }
+  }
+
   handleTankPayloads(event: any[]): void {
     this.tankDBPayload = event.flatMap(imageData => imageData.allDimensions);
     this.tankInventorPayload = event.flatMap(imageData => imageData.modifiedFields);
@@ -335,40 +509,120 @@ export class ProjectCreateFormComponent implements OnInit {
     this.topCoverInventorPayload = event.flatMap(imageData => imageData.modifiedFields);
   }
 
+  handlelvhvTurretPayloads(event: any[]): void {
+    this.lvhvTurretDBPayload = event.flatMap(imageData => imageData.allDimensions);
+    this.lvhvTurretInventorPayload = event.flatMap(imageData => imageData.modifiedFields);
+  }
+
+  handleConservatorSupportPayloads(event: any[]): void {
+    this.conservatorSupportDBPayload = event.flatMap(imageData => imageData.allDimensions);
+    this.conservatorSupportInventorPayload = event.flatMap(imageData => imageData.modifiedFields);
+  }
+
+  handleConservatorPayloads(event: any[]): void {
+    this.conservatorDBPayload = event.flatMap(imageData => imageData.allDimensions);
+    this.conservatorInventorPayload = event.flatMap(imageData => imageData.modifiedFields);
+  }
+
   createdProjectUniqueId(event: any) {
     this.generatedProjectUniqueId = event;
   }
 
   generateTankSuppressionDetails() {
     this.generateService.getSuppressionData(this.tankDetailsData, this.transformerName, 'tankConfigurations').subscribe((suppressionData: any) => {
-      console.log('Generated Suppression Data:', suppressionData);
       this.tankSuppressionData = suppressionData;
     });
     this.generateService.getIpartsIassembliesData(this.tankDetailsData, this.transformerName, 'tankConfigurations').subscribe((ipartsIassemblies: any) => {
-      console.log('Generated IpartsIassemblies Data:', ipartsIassemblies);
       this.tankIpartsIassembliesData = ipartsIassemblies;
+    });
+    this.generateService.getModelStateRepresentation(this.tankDetailsData, this.transformerName).subscribe((modelStateData: any) => {
+      this.modelRepresentationData = modelStateData?.modelStateObj;
     });
   }
 
   generateLVTrunkingSuppressionDetails() {
     this.generateService.getSuppressionData(this.lvTrunkingDetailsData, this.transformerName, 'lvTrunckingConfigurations').subscribe((suppressionData: any) => {
-      console.log('Generated Suppression Data:', suppressionData);
       this.lvTrunkingSuppressionData = suppressionData;
     });
     this.generateService.getIpartsIassembliesData(this.lvTrunkingDetailsData, this.transformerName, 'lvTrunckingConfigurations').subscribe((ipartsIassemblies: any) => {
-      console.log('Generated IpartsIassemblies Data:', ipartsIassemblies);
       this.lvTrunkingIpartsIassembliesData = ipartsIassemblies;
     });
   }
 
   generateTopCoverSuppressionDetails() {
     this.generateService.getSuppressionData(this.topCoverDetailsData, this.transformerName, 'topCoverConfigurations').subscribe((suppressionData: any) => {
-      console.log('Generated Suppression Data:', suppressionData);
       this.topCoverSuppressionData = suppressionData;
     });
     this.generateService.getIpartsIassembliesData(this.topCoverDetailsData, this.transformerName, 'topCoverConfigurations').subscribe((ipartsIassemblies: any) => {
-      console.log('Generated IpartsIassemblies Data:', ipartsIassemblies);
       this.topCoverIpartsIassembliesData = ipartsIassemblies;
+    });
+  }
+
+  generateLVHVTurretSuppressionDetails() {
+    this.generateService.getSuppressionData(this.lvhvTurretDetailsData, this.transformerName, 'lvhvTurretConfigurations').subscribe((suppressionData: any) => {
+      this.lvhvTurretSuppressionData = suppressionData;
+    });
+    this.generateService.getIpartsIassembliesData(this.lvhvTurretDetailsData, this.transformerName, 'lvhvTurretConfigurations').subscribe((ipartsIassemblies: any) => {
+      this.lvhvTurretIpartsIassembliesData = ipartsIassemblies;
+    });
+  }
+
+  generateConservatorSupportSuppressionDetails() {
+    this.generateService.getSuppressionData(this.conservatorSupportDetailsData, this.transformerName, 'conservatorSupportConfigurations').subscribe((suppressionData: any) => {
+      this.conservatorSupportSuppressionData = suppressionData;
+    });
+    this.generateService.getIpartsIassembliesData(this.conservatorSupportDetailsData, this.transformerName, 'conservatorSupportConfigurations').subscribe((ipartsIassemblies: any) => {
+      this.conservatorSupportIpartsIassembliesData = ipartsIassemblies;
+    });
+  }
+
+  generateConservatorSuppressionDetails() {
+    this.generateService.getSuppressionData(this.conservatorDetailsData, this.transformerName, 'conservatorConfigurations').subscribe((suppressionData: any) => {
+      this.conservatorSuppressionData = suppressionData;
+    });
+    this.generateService.getIpartsIassembliesData(this.conservatorDetailsData, this.transformerName, 'conservatorConfigurations').subscribe((ipartsIassemblies: any) => {
+      this.conservatorIpartsIassembliesData = ipartsIassemblies;
+    });
+  }
+
+  updateModelStateandRepresentations() {
+    if (this.modelRepresentationData && this.modelRepresentationData.length > 1) {
+      const modelRepresentationPayload = { "assemblyUpdates": this.modelRepresentationData };
+      this.assemblyService.updateModelStateandRepresenation(modelRepresentationPayload).subscribe({
+        next: response => {
+          alert(response.message);
+          this.updateParameters();
+        },
+        error: error => {
+          alert(error.error?.message || 'Failed to update parameters.');
+        }
+      });
+    } else {
+      this.updateParameters();
+    }
+  }
+
+  updateParameters() {
+
+    const parametersPayload = [
+      ...(this.tankInventorPayload || []),
+      ...(this.lvTrunkingInventorPayload || []),
+      ...(this.topCoverInventorPayload || []),
+      ...(this.lvhvTurretInventorPayload || []),
+      ...(this.conservatorSupportInventorPayload || []),
+      ...(this.conservatorInventorPayload || [])
+    ];
+
+    const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
+    const parameters = parametersPayload;
+
+    this.assemblyService.changeParameters(partFilePath, parameters).subscribe({
+      next: response => {
+        alert(response.message);
+      },
+      error: error => {
+        alert(error.error?.message || 'Failed to update parameters.');
+      }
     });
   }
 }

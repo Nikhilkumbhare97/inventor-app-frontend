@@ -40,6 +40,10 @@ export class AssemblyService {
         return this.http.post(`${this.apiUrl}/update-model-state-and-representations`, data).pipe(catchError(this.handleError));
     }
 
+    updateIpartsIassemblies(data: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/update-multiple-iparts-iassemblies`, data).pipe(catchError(this.handleError));
+    }
+
     private handleError(error: any) {  // Centralized error handling
 
         // Return an observable with a user-facing error message

@@ -108,7 +108,7 @@ export class GenerateService {
                 assembliesMap.forEach((componentsMap, assemblyFilePath) => {
                     iPartsIAssemblies.push({
                         assemblyFilePath,
-                        iPartsIAssemblies: Object.fromEntries(componentsMap)
+                        'iparts-iassemblies': Object.fromEntries(componentsMap)
                     });
                 });
 

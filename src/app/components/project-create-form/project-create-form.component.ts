@@ -89,17 +89,6 @@ export class ProjectCreateFormComponent implements OnInit {
   }
 
   generate(): void {
-    const ipartsiassembliesPayload = {
-      assemblyUpdates: [
-        ...(this.tankIpartsIassembliesData?.iPartsIAssemblies || []),
-        ...(this.lvTrunkingIpartsIassembliesData?.iPartsIAssemblies || []),
-        ...(this.topCoverIpartsIassembliesData?.iPartsIAssemblies || []),
-        ...(this.lvhvTurretIpartsIassembliesData?.iPartsIAssemblies || []),
-        ...(this.conservatorSupportIpartsIassembliesData?.iPartsIAssemblies || []),
-        ...(this.conservatorIpartsIassembliesData?.iPartsIAssemblies || [])
-      ]
-    };
-
     this.generateService.createFolder('PC0300949_01_01').subscribe({
       next: (response) => {
         if (response.status === 200) {
@@ -109,14 +98,14 @@ export class ProjectCreateFormComponent implements OnInit {
       },
       error: (error) => {
         if (error.status === 409) {
-          alert("Folder already exists.");
+          alert('Folder already exists.');
           this.updateModelStateandRepresentations();
         } else if (error.status === 400) {
-          alert("Source folder does not exist.");
+          alert('Source folder does not exist.');
         } else if (error.status === 500) {
-          alert(error.error?.message || "Server error during folder copy.");
+          alert(error.error?.message || 'Server error during folder copy.');
         } else {
-          alert("Unexpected error occurred.");
+          alert('Unexpected error occurred.');
         }
       }
     });
@@ -516,7 +505,7 @@ export class ProjectCreateFormComponent implements OnInit {
 
   updateModelStateandRepresentations() {
     if (this.modelRepresentationData && this.modelRepresentationData.length > 1) {
-      const modelRepresentationPayload = { "assemblyUpdates": this.modelRepresentationData };
+      const modelRepresentationPayload = { 'assemblyUpdates': this.modelRepresentationData };
       this.assemblyService.updateModelStateandRepresenation(modelRepresentationPayload).subscribe({
         next: response => {
           alert(response.message);
@@ -578,13 +567,40 @@ export class ProjectCreateFormComponent implements OnInit {
       this.assemblyService.suppressComponents(suppressionsPayload).subscribe({
         next: response => {
           alert(response.message);
+          this.updateIpartsIassemblies();
         },
         error: error => {
           alert(error.error?.message || 'Failed to suppress components.');
         }
       });
     } else {
+      this.updateIpartsIassemblies();
+    }
+  }
 
+  // Update IpartsIassemblies method
+  updateIpartsIassemblies() {
+    const ipartsiassembliesPayload = {
+      assemblyUpdates: [
+        ...(this.tankIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.lvTrunkingIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.topCoverIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.lvhvTurretIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.conservatorSupportIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.conservatorIpartsIassembliesData?.iPartsIAssemblies || [])
+      ]
+    };
+
+    if (ipartsiassembliesPayload && ipartsiassembliesPayload.assemblyUpdates && ipartsiassembliesPayload.assemblyUpdates.length > 1) {
+      this.assemblyService.updateIpartsIassemblies(ipartsiassembliesPayload).subscribe({
+        next: response => {
+          alert(response.message);
+        },
+        error: error => {
+          alert(error.error?.message || 'Failed to update iparts iassemblies components.');
+        }
+      });
+    } else {
     }
   }
 }

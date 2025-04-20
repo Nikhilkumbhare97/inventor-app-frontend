@@ -11,16 +11,16 @@
             "representations": "TYPE 2 - LV CABLE RH SIDE"
         }
     ],
-    "LV cable LH side": [
+    "LV cable LV side": [
         {
             "assemblyFilePath": "PC0300949_03_01",
-            "model-state": "TYPE 1 - LV CABLE LH SIDE",
-            "representations": "TYPE 1 - LV CABLE LH SIDE"
+            "model-state": "TYPE 1 - LV CABLE LV SIDE",
+            "representations": "TYPE 1 - LV CABLE LV SIDE"
         },
         {
             "assemblyFilePath": "PC0300949_01_01",
-            "model-state": "TYPE 1 - LV CABLE LH SIDE",
-            "representations": "TYPE 1 - LV CABLE LH SIDE"
+            "model-state": "TYPE 1 - LV CABLE LV SIDE",
+            "representations": "TYPE 1 - LV CABLE LV SIDE"
         }
     ]
 }

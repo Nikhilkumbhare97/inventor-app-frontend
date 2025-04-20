@@ -36,6 +36,10 @@ export class AssemblyService {
         return this.http.post(`${this.apiUrl}/suppress-multiple-components`, data).pipe(catchError(this.handleError));
     }
 
+    updateModelStateandRepresenation(data: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/update-model-state-and-representations`, data).pipe(catchError(this.handleError));
+    }
+
     private handleError(error: any) {  // Centralized error handling
 
         // Return an observable with a user-facing error message

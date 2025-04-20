@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs'; // Import of and throwError
 import { map, catchError, tap } from 'rxjs/operators'; // Import catchError
 import { environment } from '../../environments/environment';
@@ -13,11 +13,13 @@ export class GenerateService {
     constructor(private http: HttpClient) { }
 
     createFolder(folderName: string): Observable<any> {
-        return this.http.post<any>(`${this.apiUrl}/files/copy-folder/${folderName}`, {}) // Send empty body
-            .pipe(
-                tap((response: any) => console.log('API Response:', response)), // Log successful responses
-                catchError(this.handleError)
-            );
+        return this.http.post<any>(
+            `${this.apiUrl}/files/copy-folder/${folderName}`,
+            {},
+            { observe: 'response' }  // Important to get status code
+        ).pipe(
+            catchError(this.handleHttpError)
+        );
     }
 
     getSuppressionData(sectionDetails: any, transformerName: string, config: string): Observable<any> {
@@ -145,4 +147,13 @@ export class GenerateService {
             return throwError(() => new Error(error.error?.message || 'Something went wrong. Please try again later.'));
         }
     }
+
+    private handleHttpError(error: HttpErrorResponse) {
+        // Optional: log to console or remote logging
+        console.error('HTTP Error:', error);
+
+        // Rethrow the error so the subscriber can catch it
+        return throwError(() => error);
+    }
+
 }

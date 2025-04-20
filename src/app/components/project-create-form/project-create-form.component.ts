@@ -89,21 +89,6 @@ export class ProjectCreateFormComponent implements OnInit {
   }
 
   generate(): void {
-    const assemblyPath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.iam';
-
-
-
-    const suppressionsPayload = {
-      suppressActions: [
-        ...(this.tankSuppressionData?.suppressActions || []),
-        ...(this.lvTrunkingSuppressionData?.suppressActions || []),
-        ...(this.topCoverSuppressionData?.suppressActions || []),
-        ...(this.lvhvTurretSuppressionData?.suppressActions || []),
-        ...(this.conservatorSupportSuppressionData?.suppressActions || []),
-        ...(this.conservatorSuppressionData?.suppressActions || [])
-      ]
-    };
-
     const ipartsiassembliesPayload = {
       assemblyUpdates: [
         ...(this.tankIpartsIassembliesData?.iPartsIAssemblies || []),
@@ -114,62 +99,6 @@ export class ProjectCreateFormComponent implements OnInit {
         ...(this.conservatorIpartsIassembliesData?.iPartsIAssemblies || [])
       ]
     };
-
-    // this.generateService.createFolder('PC0300949_01_01').subscribe({
-    //   next: (response) => {
-    //     console.log('Folder creation response:', response);
-    //     // Now calling openAssembly
-    //     this.assemblyService.openAssembly(assemblyPath).subscribe({
-    //       next: (assemblyResponse) => {
-    //         console.log('Assembly opened successfully:', assemblyResponse);
-    //         alert(assemblyResponse.message);
-    //       },
-    //       error: (assemblyError) => {
-    //         console.error('Error opening assembly:', assemblyError);
-    //         alert('Failed to open assembly.');
-    //       }
-    //     });
-    //   },
-    //   error: (error) => {
-    //     console.error('Error creating folder:', error);
-    //     alert('Failed to create folder');
-    //     this.assemblyService.openAssembly(assemblyPath).subscribe({
-    //       next: (assemblyResponse) => {
-    //         console.log('Assembly opened successfully:', assemblyResponse);
-    //         alert(assemblyResponse.message);
-
-    //         const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
-    //         const parameters = parametersPayload;
-
-    //         this.assemblyService.changeParameters(partFilePath, parameters).subscribe({
-    //           next: response => {
-    //             console.log('Success:', response);
-    //             alert(response.message);
-
-    //             this.assemblyService.suppressComponents(this.tankSuppressionData).subscribe({
-    //               next: response => {
-    //                 console.log('Success:', response);
-    //                 alert(response.message);
-    //               },
-    //               error: error => {
-    //                 console.error('Error:', error);
-    //                 alert('Failed to suppress components.');
-    //               }
-    //             });
-    //           },
-    //           error: error => {
-    //             console.error('Error:', error);
-    //             alert('Failed to update parameters.');
-    //           }
-    //         });
-    //       },
-    //       error: (assemblyError) => {
-    //         console.error('Error opening assembly:', assemblyError);
-    //         alert('Failed to open assembly.');
-    //       }
-    //     });
-    //   }
-    // });
 
     this.generateService.createFolder('PC0300949_01_01').subscribe({
       next: (response) => {
@@ -602,6 +531,7 @@ export class ProjectCreateFormComponent implements OnInit {
     }
   }
 
+  // Update parameters method
   updateParameters() {
 
     const parametersPayload = [
@@ -616,13 +546,45 @@ export class ProjectCreateFormComponent implements OnInit {
     const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
     const parameters = parametersPayload;
 
-    this.assemblyService.changeParameters(partFilePath, parameters).subscribe({
-      next: response => {
-        alert(response.message);
-      },
-      error: error => {
-        alert(error.error?.message || 'Failed to update parameters.');
-      }
-    });
+    if (parametersPayload && parametersPayload.length > 1) {
+      this.assemblyService.changeParameters(partFilePath, parameters).subscribe({
+        next: response => {
+          alert(response.message);
+          this.updateSuppressions();
+        },
+        error: error => {
+          alert(error.error?.message || 'Failed to update parameters.');
+        }
+      });
+    } else {
+      this.updateSuppressions();
+    }
+  }
+
+  // Update suppression method
+  updateSuppressions() {
+    const suppressionsPayload = {
+      suppressActions: [
+        ...(this.tankSuppressionData?.suppressActions || []),
+        ...(this.lvTrunkingSuppressionData?.suppressActions || []),
+        ...(this.topCoverSuppressionData?.suppressActions || []),
+        ...(this.lvhvTurretSuppressionData?.suppressActions || []),
+        ...(this.conservatorSupportSuppressionData?.suppressActions || []),
+        ...(this.conservatorSuppressionData?.suppressActions || [])
+      ]
+    };
+
+    if (suppressionsPayload && suppressionsPayload.suppressActions && suppressionsPayload.suppressActions.length > 1) {
+      this.assemblyService.suppressComponents(suppressionsPayload).subscribe({
+        next: response => {
+          alert(response.message);
+        },
+        error: error => {
+          alert(error.error?.message || 'Failed to suppress components.');
+        }
+      });
+    } else {
+
+    }
   }
 }

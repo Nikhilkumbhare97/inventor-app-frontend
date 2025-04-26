@@ -80,7 +80,12 @@ export class ProjectDetailsComponent implements OnChanges {
   onProjectFormSave(): void {
     if (this.projectDetailsForm.invalid) return;
 
-    const projectData = this.projectDetailsForm.value;
+    const projectData = {
+      ...this.projectDetailsForm.value,
+      date: this.formatDateToLocalYYYYMMDD(this.projectDetailsForm.value.date)
+    };
+    console.log('projectData', projectData);
+
     const saveOperation = this.isEditMode && this.projectUniqueId
       ? this.projectService.updateProject(this.projectUniqueId, projectData)
       : this.projectService.createProject(projectData);
@@ -99,4 +104,12 @@ export class ProjectDetailsComponent implements OnChanges {
     this.projectDetailsForm.disable();
     this.transformerSection.emit(true);
   }
+
+  private formatDateToLocalYYYYMMDD(date: Date): string {
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are 0-indexed
+    const day = ('0' + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+
 }

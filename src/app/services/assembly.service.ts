@@ -26,7 +26,6 @@ export class AssemblyService {
         return this.http.post<any>(`${this.apiUrl}/change-parameters`, body)
             .pipe(
                 catchError(error => {
-                    console.error('Error updating parameters:', error);
                     return throwError(() => new Error('Failed to update parameters.'));
                 })
             );
@@ -38,6 +37,14 @@ export class AssemblyService {
 
     updateModelStateandRepresenation(data: any): Observable<any> {
         return this.http.post(`${this.apiUrl}/update-model-state-and-representations`, data).pipe(catchError(this.handleError));
+    }
+
+    updateIpartsIassemblies(data: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/update-multiple-iparts-iassemblies`, data).pipe(catchError(this.handleError));
+    }
+
+    updateIproperties(data: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/update-all-properties`, data).pipe(catchError(this.handleError));
     }
 
     private handleError(error: any) {  // Centralized error handling

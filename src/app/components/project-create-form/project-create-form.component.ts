@@ -56,6 +56,7 @@ export class ProjectCreateFormComponent implements OnInit {
   conservatorSupportIpartsIassembliesData: any = {};
   conservatorIpartsIassembliesData: any = {};
   modelRepresentationData: any = {};
+  projectDataPayload: any;
 
   constructor(
     private fb: FormBuilder,
@@ -89,88 +90,6 @@ export class ProjectCreateFormComponent implements OnInit {
   }
 
   generate(): void {
-    const assemblyPath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.iam';
-
-
-
-    const suppressionsPayload = {
-      suppressActions: [
-        ...(this.tankSuppressionData?.suppressActions || []),
-        ...(this.lvTrunkingSuppressionData?.suppressActions || []),
-        ...(this.topCoverSuppressionData?.suppressActions || []),
-        ...(this.lvhvTurretSuppressionData?.suppressActions || []),
-        ...(this.conservatorSupportSuppressionData?.suppressActions || []),
-        ...(this.conservatorSuppressionData?.suppressActions || [])
-      ]
-    };
-
-    const ipartsiassembliesPayload = {
-      assemblyUpdates: [
-        ...(this.tankIpartsIassembliesData?.iPartsIAssemblies || []),
-        ...(this.lvTrunkingIpartsIassembliesData?.iPartsIAssemblies || []),
-        ...(this.topCoverIpartsIassembliesData?.iPartsIAssemblies || []),
-        ...(this.lvhvTurretIpartsIassembliesData?.iPartsIAssemblies || []),
-        ...(this.conservatorSupportIpartsIassembliesData?.iPartsIAssemblies || []),
-        ...(this.conservatorIpartsIassembliesData?.iPartsIAssemblies || [])
-      ]
-    };
-
-    // this.generateService.createFolder('PC0300949_01_01').subscribe({
-    //   next: (response) => {
-    //     console.log('Folder creation response:', response);
-    //     // Now calling openAssembly
-    //     this.assemblyService.openAssembly(assemblyPath).subscribe({
-    //       next: (assemblyResponse) => {
-    //         console.log('Assembly opened successfully:', assemblyResponse);
-    //         alert(assemblyResponse.message);
-    //       },
-    //       error: (assemblyError) => {
-    //         console.error('Error opening assembly:', assemblyError);
-    //         alert('Failed to open assembly.');
-    //       }
-    //     });
-    //   },
-    //   error: (error) => {
-    //     console.error('Error creating folder:', error);
-    //     alert('Failed to create folder');
-    //     this.assemblyService.openAssembly(assemblyPath).subscribe({
-    //       next: (assemblyResponse) => {
-    //         console.log('Assembly opened successfully:', assemblyResponse);
-    //         alert(assemblyResponse.message);
-
-    //         const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
-    //         const parameters = parametersPayload;
-
-    //         this.assemblyService.changeParameters(partFilePath, parameters).subscribe({
-    //           next: response => {
-    //             console.log('Success:', response);
-    //             alert(response.message);
-
-    //             this.assemblyService.suppressComponents(this.tankSuppressionData).subscribe({
-    //               next: response => {
-    //                 console.log('Success:', response);
-    //                 alert(response.message);
-    //               },
-    //               error: error => {
-    //                 console.error('Error:', error);
-    //                 alert('Failed to suppress components.');
-    //               }
-    //             });
-    //           },
-    //           error: error => {
-    //             console.error('Error:', error);
-    //             alert('Failed to update parameters.');
-    //           }
-    //         });
-    //       },
-    //       error: (assemblyError) => {
-    //         console.error('Error opening assembly:', assemblyError);
-    //         alert('Failed to open assembly.');
-    //       }
-    //     });
-    //   }
-    // });
-
     this.generateService.createFolder('PC0300949_01_01').subscribe({
       next: (response) => {
         if (response.status === 200) {
@@ -180,14 +99,14 @@ export class ProjectCreateFormComponent implements OnInit {
       },
       error: (error) => {
         if (error.status === 409) {
-          alert("Folder already exists.");
+          alert('Folder already exists.');
           this.updateModelStateandRepresentations();
         } else if (error.status === 400) {
-          alert("Source folder does not exist.");
+          alert('Source folder does not exist.');
         } else if (error.status === 500) {
-          alert(error.error?.message || "Server error during folder copy.");
+          alert(error.error?.message || 'Server error during folder copy.');
         } else {
-          alert("Unexpected error occurred.");
+          alert('Unexpected error occurred.');
         }
       }
     });
@@ -294,7 +213,14 @@ export class ProjectCreateFormComponent implements OnInit {
 
   projectDataLoaded(event: boolean) {
     if (this.isEditMode && this.projectUniqueId && event) {
+
       this.loadTransformerDetails();
+    }
+  }
+
+  projectData(event: any) {
+    if (event) {
+      this.projectDataPayload = event;
     }
   }
 
@@ -587,7 +513,7 @@ export class ProjectCreateFormComponent implements OnInit {
 
   updateModelStateandRepresentations() {
     if (this.modelRepresentationData && this.modelRepresentationData.length > 1) {
-      const modelRepresentationPayload = { "assemblyUpdates": this.modelRepresentationData };
+      const modelRepresentationPayload = { 'assemblyUpdates': this.modelRepresentationData };
       this.assemblyService.updateModelStateandRepresenation(modelRepresentationPayload).subscribe({
         next: response => {
           alert(response.message);
@@ -602,6 +528,7 @@ export class ProjectCreateFormComponent implements OnInit {
     }
   }
 
+  // Update parameters method
   updateParameters() {
 
     const parametersPayload = [
@@ -616,13 +543,110 @@ export class ProjectCreateFormComponent implements OnInit {
     const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
     const parameters = parametersPayload;
 
-    this.assemblyService.changeParameters(partFilePath, parameters).subscribe({
-      next: response => {
-        alert(response.message);
-      },
-      error: error => {
-        alert(error.error?.message || 'Failed to update parameters.');
+    if (parametersPayload && parametersPayload.length > 1) {
+      this.assemblyService.changeParameters(partFilePath, parameters).subscribe({
+        next: response => {
+          alert(response.message);
+          this.updateSuppressions();
+        },
+        error: error => {
+          alert(error.error?.message || 'Failed to update parameters.');
+        }
+      });
+    } else {
+      this.updateSuppressions();
+    }
+  }
+
+  // Update suppression method
+  updateSuppressions() {
+    const suppressionsPayload = {
+      suppressActions: [
+        ...(this.tankSuppressionData?.suppressActions || []),
+        ...(this.lvTrunkingSuppressionData?.suppressActions || []),
+        ...(this.topCoverSuppressionData?.suppressActions || []),
+        ...(this.lvhvTurretSuppressionData?.suppressActions || []),
+        ...(this.conservatorSupportSuppressionData?.suppressActions || []),
+        ...(this.conservatorSuppressionData?.suppressActions || [])
+      ]
+    };
+
+    if (suppressionsPayload && suppressionsPayload.suppressActions && suppressionsPayload.suppressActions.length > 1) {
+      this.assemblyService.suppressComponents(suppressionsPayload).subscribe({
+        next: response => {
+          alert(response.message);
+          this.updateIpartsIassemblies();
+        },
+        error: error => {
+          alert(error.error?.message || 'Failed to suppress components.');
+        }
+      });
+    } else {
+      this.updateIpartsIassemblies();
+    }
+  }
+
+  // Update IpartsIassemblies method
+  updateIpartsIassemblies() {
+    const ipartsiassembliesPayload = {
+      assemblyUpdates: [
+        ...(this.tankIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.lvTrunkingIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.topCoverIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.lvhvTurretIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.conservatorSupportIpartsIassembliesData?.iPartsIAssemblies || []),
+        ...(this.conservatorIpartsIassembliesData?.iPartsIAssemblies || [])
+      ]
+    };
+
+    if (ipartsiassembliesPayload && ipartsiassembliesPayload.assemblyUpdates && ipartsiassembliesPayload.assemblyUpdates.length > 1) {
+      this.assemblyService.updateIpartsIassemblies(ipartsiassembliesPayload).subscribe({
+        next: response => {
+          alert(response.message);
+          this.updateIproperties();
+        },
+        error: error => {
+          alert(error.error?.message || 'Failed to update iparts iassemblies components.');
+        }
+      });
+    } else {
+      this.updateIproperties();
+    }
+  }
+
+  // Update iproperties method
+  updateIproperties() {
+    const payload = {
+      drawingspath: "D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL",
+      ipropertiesdetails: {
+        "partPrefix": this.projectDataPayload.projectNumber,
+        "Project": this.projectDataPayload.projectName,
+        "Company": this.projectDataPayload.clientName,
+        "Designer": this.projectDataPayload.createdBy,
+        "Checked By": this.projectDataPayload.checkedBy,
+        "Engr Approved By": this.projectDataPayload.preparedBy,
+        "Creation Time": this.formatDate(this.projectDataPayload.date)
       }
-    });
+    };
+
+    if (payload) {
+      this.assemblyService.updateIproperties(payload).subscribe({
+        next: response => {
+          alert(response.message);
+        },
+        error: error => {
+          alert(error.error?.message || 'Failed to update iparts iassemblies components.');
+        }
+      });
+    } else {
+    }
+  }
+
+  formatDate(date: string | number | Date) {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

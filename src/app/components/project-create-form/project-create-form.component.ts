@@ -56,6 +56,7 @@ export class ProjectCreateFormComponent implements OnInit {
   conservatorSupportIpartsIassembliesData: any = {};
   conservatorIpartsIassembliesData: any = {};
   modelRepresentationData: any = {};
+  projectDataPayload: any;
 
   constructor(
     private fb: FormBuilder,
@@ -212,7 +213,14 @@ export class ProjectCreateFormComponent implements OnInit {
 
   projectDataLoaded(event: boolean) {
     if (this.isEditMode && this.projectUniqueId && event) {
+
       this.loadTransformerDetails();
+    }
+  }
+
+  projectData(event: any) {
+    if (event) {
+      this.projectDataPayload = event;
     }
   }
 
@@ -595,6 +603,36 @@ export class ProjectCreateFormComponent implements OnInit {
       this.assemblyService.updateIpartsIassemblies(ipartsiassembliesPayload).subscribe({
         next: response => {
           alert(response.message);
+          this.updateIproperties();
+        },
+        error: error => {
+          alert(error.error?.message || 'Failed to update iparts iassemblies components.');
+        }
+      });
+    } else {
+      this.updateIproperties();
+    }
+  }
+
+  // Update iproperties method
+  updateIproperties() {
+    const payload = {
+      drawingspath: "D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL",
+      ipropertiesdetails: {
+        "partPrefix": this.projectDataPayload.projectNumber,
+        "Project": this.projectDataPayload.projectName,
+        "Company": this.projectDataPayload.clientName,
+        "Designer": this.projectDataPayload.createdBy,
+        "Checked By": this.projectDataPayload.checkedBy,
+        "Engr Approved By": this.projectDataPayload.preparedBy,
+        "Creation Time": this.formatDate(this.projectDataPayload.date)
+      }
+    };
+
+    if (payload) {
+      this.assemblyService.updateIproperties(payload).subscribe({
+        next: response => {
+          alert(response.message);
         },
         error: error => {
           alert(error.error?.message || 'Failed to update iparts iassemblies components.');
@@ -602,5 +640,13 @@ export class ProjectCreateFormComponent implements OnInit {
       });
     } else {
     }
+  }
+
+  formatDate(date: string | number | Date) {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

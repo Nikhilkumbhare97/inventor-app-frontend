@@ -1,6 +1,6 @@
 <app-project-details [projectUniqueId]="projectUniqueId" [isEditMode]="isEditMode"
     (transformerSection)="showTransformerDetails($event)" (projectDataLoaded)="projectDataLoaded($event)"
-    (createdProjectUniqueId)="createdProjectUniqueId($event)"></app-project-details>
+    (createdProjectUniqueId)="createdProjectUniqueId($event)" (projectData)="projectData($event)"></app-project-details>
 
 <form [formGroup]="transformerDetailsForm">
     <mat-card class="section box-outline" *ngIf="transformerSection">

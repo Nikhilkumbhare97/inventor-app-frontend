@@ -10,6 +10,7 @@ import { ProjectService } from '../../services/project.service';
 export class ProjectDetailsComponent implements OnChanges {
   @Output() transformerSection = new EventEmitter<boolean>();
   @Output() projectDataLoaded = new EventEmitter<boolean>();
+  @Output() projectData = new EventEmitter<any>();
   @Output() createdProjectUniqueId = new EventEmitter<any>();
   @Input() projectUniqueId: string | null = null;
   @Input() isEditMode = false;
@@ -56,6 +57,7 @@ export class ProjectDetailsComponent implements OnChanges {
           date: new Date(projectData.date) // Ensure proper date format
         });
         this.projectDataLoaded.emit(true);
+        this.projectData.emit(projectData);
       },
       error: (error) => console.error('❌ Error fetching project data:', error)
     });
@@ -86,6 +88,7 @@ export class ProjectDetailsComponent implements OnChanges {
     saveOperation.subscribe({
       next: (data) => {
         this.createdProjectUniqueId.emit(data.projectUniqueId);
+        this.projectData.emit(projectData);
         this.showTransformerDetails();
       },
       error: (error) => console.error('❌ Error saving project:', error)

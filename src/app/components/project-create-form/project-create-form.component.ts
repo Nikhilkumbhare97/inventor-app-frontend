@@ -619,6 +619,7 @@ export class ProjectCreateFormComponent implements OnInit {
     const payload = {
       drawingspath: "D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL",
       ipropertiesdetails: {
+        "originalPrefix": "PC0300949",
         "partPrefix": this.projectDataPayload.projectNumber,
         "Project": this.projectDataPayload.projectName,
         "Company": this.projectDataPayload.clientName,

@@ -540,7 +540,8 @@ export class ProjectCreateFormComponent implements OnInit {
       ...(this.conservatorInventorPayload || [])
     ];
 
-    const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
+    //const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
+    const partFilePath = 'D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
     const parameters = parametersPayload;
 
     if (parametersPayload && parametersPayload.length > 1) {
@@ -617,7 +618,8 @@ export class ProjectCreateFormComponent implements OnInit {
   // Update iproperties method
   updateIproperties() {
     const payload = {
-      drawingspath: "D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL",
+      //drawingspath: "D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL",
+      drawingspath: "D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL",
       ipropertiesdetails: {
         "originalPrefix": "PC0300949",
         "partPrefix": this.projectDataPayload.projectNumber,

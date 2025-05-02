@@ -148,6 +148,16 @@ export class GenerateService {
         }
     }
 
+    renameFolder(oldFolderName: string, newFolderName: string): Observable<any> {
+        return this.http.post<any>(
+            `${this.apiUrl}/files/rename-folder/${oldFolderName}/${newFolderName}`,
+            {},
+            { observe: 'response' }  // Important to get status code
+        ).pipe(
+            catchError(this.handleHttpError)
+        );
+    }
+
     private handleHttpError(error: HttpErrorResponse) {
         // Optional: log to console or remote logging
         console.error('HTTP Error:', error);

@@ -540,8 +540,8 @@ export class ProjectCreateFormComponent implements OnInit {
       ...(this.conservatorInventorPayload || [])
     ];
 
-    //const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
-    const partFilePath = 'D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
+    const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
+    //const partFilePath = 'D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
     const parameters = parametersPayload;
 
     if (parametersPayload && parametersPayload.length > 1) {
@@ -618,8 +618,8 @@ export class ProjectCreateFormComponent implements OnInit {
   // Update iproperties method
   updateIproperties() {
     const payload = {
-      //drawingspath: "D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL",
-      drawingspath: "D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL",
+      drawingspath: "D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL",
+      //drawingspath: "D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL",
       ipropertiesdetails: {
         "originalPrefix": "PC0300949",
         "partPrefix": this.projectDataPayload.projectNumber,
@@ -636,12 +636,61 @@ export class ProjectCreateFormComponent implements OnInit {
       this.assemblyService.updateIproperties(payload).subscribe({
         next: response => {
           alert(response.message);
+          this.updateFileNames(payload);
         },
         error: error => {
-          alert(error.error?.message || 'Failed to update iparts iassemblies components.');
+          alert(error.error?.message || 'Failed to update iProperties.');
         }
       });
     } else {
+      this.updateFileNames(payload)
+    }
+  }
+
+  updateFileNames(payload: any) {
+    const fileUpdatePayload = {
+      drawingspath: payload.drawingspath,
+      partPrefix: payload.ipropertiesdetails.partPrefix,
+      assemblyList: [
+        "PC0300949_01_01.iam"
+      ]
+    };
+
+    if (fileUpdatePayload) {
+      this.assemblyService.updateFileNames(fileUpdatePayload).subscribe({
+        next: response => {
+          alert(response.message);
+          this.updateFolderName(fileUpdatePayload);
+        },
+        error: error => {
+          alert(error.error?.message || 'Failed to update filenames.');
+        }
+      });
+    } else {
+      this.updateFolderName(fileUpdatePayload);
+    }
+  }
+
+  updateFolderName(payload: any) {
+    if (payload) {
+      this.generateService.renameFolder('PC0300949_01_01', payload.partPrefix).subscribe({
+        next: (response) => {
+          if (response.status === 200) {
+            alert(response.body.message);  // Success
+          }
+        },
+        error: (error) => {
+          if (error.status === 400) {
+            alert('Source folder does not exist.');
+          } else if (error.status === 500) {
+            alert(error.error?.message || 'Server error during folder rename.');
+          } else {
+            alert('Unexpected error occurred.');
+          }
+        }
+      });
+    } else {
+
     }
   }
 

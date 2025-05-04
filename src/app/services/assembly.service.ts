@@ -47,6 +47,10 @@ export class AssemblyService {
         return this.http.post(`${this.apiUrl}/update-all-properties`, data).pipe(catchError(this.handleError));
     }
 
+    updateFileNames(data: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/design-assist-rename`, data).pipe(catchError(this.handleError));
+    }
+
     private handleError(error: any) {  // Centralized error handling
 
         // Return an observable with a user-facing error message

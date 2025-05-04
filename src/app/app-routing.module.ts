@@ -16,7 +16,6 @@ const routes: Routes = [
   { path: 'input-dragger', component: EditableSvgComponent }
 ];
 
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

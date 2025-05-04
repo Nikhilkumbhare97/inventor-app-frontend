@@ -1,35 +1,71 @@
-:root {
-    --primary-bg: #9CA2C4;
-    --secondary-bg: #7F8BB0;
-    --accent-bg: #62749B;
-    --highlight-bg: #435585;
-    --base-font-size: 16px;
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
 .tabs {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 45vw;
+    height: 85vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-end;
+    text-align: center;
+    /* vertical center */
     align-items: center;
-    padding: 3.125rem;
-    background-color: var(--secondary-bg);
+    /* horizontal center */
+    z-index: 1;
+    /* make sure it stays above background */
+    padding: 1.5rem;
+    //background-color: rgba(255, 255, 255, 0.1);
+    /* optional: slight background tint */
 }
 
 .tabs button {
-    font-size: 3rem;
-    width: 18rem;
-    padding: 1.25rem 1.25rem;
-    margin: 0 1rem;
+    font-size: 1.5rem;
+    font-family: 'Times New Roman', Times, serif;
+    padding: .5rem;
+    margin: 1rem;
+    width: 10rem;
     cursor: pointer;
     transition: background 0.3s ease;
     border: none;
-    border-radius: 0.75rem;
-}
-
-.tabs button.active {
-    background-color: #435585;
-    color: white;
+    border-radius: 0.5rem;
+    background-color: antiquewhite;
 }
 
 .tabs button:hover {
-    background-color: #BCCCDC;
+    background-color: #deab63;
+}
+
+.full-page-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.full-page-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.head_1 {
+    font-size: 2.1rem;
+    font-family: 'Bahnschrift Condensed', 'Bahnschrift', sans-serif;
+    font-weight: bold;
+    color: rgb(40, 80, 181);
+}
+
+.head_2 {
+    font-size: 1rem;
+    color: rgb(87, 82, 82);
 }

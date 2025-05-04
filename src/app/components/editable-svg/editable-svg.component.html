@@ -10,7 +10,7 @@
 </div>
 
 <!-- SVG Content -->
-<div *ngIf="svgData">
+<div *ngIf="svgData" class="svg-wrapper">
     <div *ngIf="!inputOnlyMode" class="svg-container">
         <img #svgImage [src]="svgData?.svgImage" class="svg-background" />
 
@@ -24,11 +24,6 @@
     <div *ngIf="inputOnlyMode" class="svg-container">
         <img #svgImage [src]="svgData?.svgImage" class="svg-background" />
 
-        <!-- <div *ngFor="let dim of svgData?.dimensions" class="draggable" cdkDrag
-            [ngStyle]="{'top': dim.y + 'rem', 'left': dim.x + 'rem'}" (cdkDragEnded)="onDragEnd($event, dim)">
-            <input type="number" [(ngModel)]="dim.defaultValue" />
-            <span>{{ dim.label }}</span>
-        </div> -->
         <div *ngFor="let dim of svgData?.dimensions" class="draggable"
             [ngStyle]="{'top': dim.y + 'rem', 'left': dim.x + 'rem'}">
             <input type="text" [(ngModel)]="dim.inputValue"
@@ -41,6 +36,5 @@
 
 <!-- Input-only mode save button -->
 <div class="save-modified" *ngIf="inputOnlyMode">
-    <button mat-raised-button color="primary" [disabled]="buttonDisabled" (click)="saveModifiedData()">Save
-        modifed</button>
+    <button mat-raised-button color="primary" [disabled]="buttonDisabled" (click)="saveModifiedData()">Save</button>
 </div>

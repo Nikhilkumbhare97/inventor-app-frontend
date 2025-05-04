@@ -7,11 +7,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  activeTab = 'users';
+  activeTab = 'create-project';
 
   constructor(private router: Router) { }
 
   setActiveTab(tab: string) {
     this.activeTab = tab;
+    this.router.navigate([`/${tab}`]);
   }
 }

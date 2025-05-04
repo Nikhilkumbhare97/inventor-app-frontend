@@ -1,16 +1,6 @@
-:root {
-    --primary-bg: #9CA2C4;
-    --secondary-bg: #7F8BB0;
-    --accent-bg: #62749B;
-    --highlight-bg: #435585;
-    --base-font-size: 16px;
-}
-
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: var(--primary-bg);
     font-size: 1rem;
 }
 
@@ -18,9 +8,20 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #435585;
-    color: white;
+    position: relative;
+    background-color: rgba(216, 157, 84, 0.0);
+    /* 80% opaque */
+    color: #000000;
     padding: 0.625rem;
+    height: max-content;
+}
+
+.logo-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
 }
 
 .hamburger-menu,
@@ -33,7 +34,7 @@ body {
 .logo {
     display: flex;
     align-items: center;
-    font-size: 1.5rem;
+    font-size: 2rem;
 }
 
 .user-section {
@@ -46,6 +47,11 @@ body {
 .user-icon {
     font-size: 1.5rem;
     margin-right: 0.3125rem;
+
+    svg {
+        height: 2rem;
+        width: 2rem;
+    }
 }
 
 .username {
@@ -56,9 +62,9 @@ body {
     position: absolute;
     top: 100%;
     right: 0;
-    background: var(--primary-bg);
-    color: black;
-    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.15);
+    background: #f4f4f4;
+    color: #000000;
+    box-shadow: 0 0.125rem 0.5rem #d89d54(0, 0, 0, 0.15);
     border-radius: 0.25rem;
     overflow: hidden;
 }
@@ -66,7 +72,7 @@ body {
 .user-menu p {
     margin: 0;
     padding: 0.625rem;
-    border-bottom: 0.0625rem solid #ddd;
+    border-bottom: 0.0625rem solid #bb7f2d;
 }
 
 .user-menu button {
@@ -79,33 +85,31 @@ body {
 }
 
 .user-menu button:hover {
-    background: #eee;
-}
-
-.logo-container {
-    display: flex;
-    align-items: center;
+    background: #bb7f2d;
 }
 
 .logo img {
-    width: 2.5rem;
+    width: 4rem;
     height: auto;
 }
 
 .logo-text {
     margin-left: 0.625rem;
-    font-size: 1.875rem;
-    font-family: 'Times New Roman', Times, serif;
+    font-size: 2rem;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
 }
 
 .side-drawer {
     position: fixed;
     top: 0;
-    left: -15.625rem;
-    width: 15.625rem;
+    left: -18rem;
+    width: 18rem;
     height: 100%;
-    background-color: #435585;
-    color: white;
+    background-color: #f4f4f4;
+    //color: #f4f4f4;
     transition: left 0.3s ease;
     padding-top: 3.75rem;
     z-index: 1000;
@@ -126,7 +130,8 @@ body {
 }
 
 .side-drawer li:hover {
-    background-color: #BCCCDC;
+    background-color: #bb7f2d;
+    color: #000000;
 }
 
 .overlay {
@@ -135,7 +140,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: #d89d54(0, 0, 0, 0.5);
 }
 
 .overlay.open {

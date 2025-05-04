@@ -1,0 +1,13 @@
+@use '@angular/material' as mat;
+
+$primary: mat.define-palette(mat.$amber-palette, 400, 300, 700); // Or use your own
+$accent: mat.define-palette(mat.$brown-palette, 300);
+$warn: mat.define-palette(mat.$red-palette);
+
+$theme: mat.define-light-theme((color: (primary: $primary,
+                accent: $accent,
+                warn: $warn,
+            ),
+        ));
+
+@include mat.all-component-themes($theme);

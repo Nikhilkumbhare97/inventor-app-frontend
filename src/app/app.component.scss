@@ -9,10 +9,25 @@ app-header {
     left: 0;
     width: 100%;
     z-index: 1000;
+    transition: top 0.3s ease-in-out;
 }
 
-router-outlet {
+app-header.hidden {
+    top: -100px;
+}
+
+.main-content {
     flex: 1;
     padding-top: 4rem;
     overflow-y: auto;
+}
+
+.no-padding {
+    padding-top: 0 !important;
+}
+
+app-header.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
 }

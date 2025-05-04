@@ -90,10 +90,10 @@ export class ProjectCreateFormComponent implements OnInit {
   }
 
   generate(): void {
-    this.generateService.createFolder('PC0300949_01_01').subscribe({
+    this.generateService.createFolder('ABC099001').subscribe({
       next: (response) => {
         if (response.status === 200) {
-          alert(response.body.message);  // Success
+          //alert(response.body.message);  // Success
           this.updateModelStateandRepresentations();
         }
       },
@@ -516,7 +516,7 @@ export class ProjectCreateFormComponent implements OnInit {
       const modelRepresentationPayload = { 'assemblyUpdates': this.modelRepresentationData };
       this.assemblyService.updateModelStateandRepresenation(modelRepresentationPayload).subscribe({
         next: response => {
-          alert(response.message);
+          //alert(response.message);
           this.updateParameters();
         },
         error: error => {
@@ -540,14 +540,14 @@ export class ProjectCreateFormComponent implements OnInit {
       ...(this.conservatorInventorPayload || [])
     ];
 
-    const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
-    //const partFilePath = 'D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL\\PC0300949_03_01.ipt';
+    const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\ABC099001\\MODEL\\ABC099001_03_01.ipt';
+    //const partFilePath = 'D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\ABC099001\\MODEL\\ABC099001_03_01.ipt';
     const parameters = parametersPayload;
 
     if (parametersPayload && parametersPayload.length > 1) {
       this.assemblyService.changeParameters(partFilePath, parameters).subscribe({
         next: response => {
-          alert(response.message);
+          //alert(response.message);
           this.updateSuppressions();
         },
         error: error => {
@@ -575,7 +575,7 @@ export class ProjectCreateFormComponent implements OnInit {
     if (suppressionsPayload && suppressionsPayload.suppressActions && suppressionsPayload.suppressActions.length > 1) {
       this.assemblyService.suppressComponents(suppressionsPayload).subscribe({
         next: response => {
-          alert(response.message);
+          //alert(response.message);
           this.updateIpartsIassemblies();
         },
         error: error => {
@@ -603,7 +603,7 @@ export class ProjectCreateFormComponent implements OnInit {
     if (ipartsiassembliesPayload && ipartsiassembliesPayload.assemblyUpdates && ipartsiassembliesPayload.assemblyUpdates.length > 1) {
       this.assemblyService.updateIpartsIassemblies(ipartsiassembliesPayload).subscribe({
         next: response => {
-          alert(response.message);
+          //alert(response.message);
           this.updateIproperties();
         },
         error: error => {
@@ -618,10 +618,10 @@ export class ProjectCreateFormComponent implements OnInit {
   // Update iproperties method
   updateIproperties() {
     const payload = {
-      drawingspath: "D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL",
-      //drawingspath: "D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\PC0300949_01_01\\MODEL",
+      drawingspath: "D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\ABC099001\\MODEL",
+      //drawingspath: "D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\ABC099001_01_01\\MODEL",
       ipropertiesdetails: {
-        "originalPrefix": "PC0300949",
+        "originalPrefix": "ABC099001",
         "partPrefix": this.projectDataPayload.projectNumber,
         "Project": this.projectDataPayload.projectName,
         "Company": this.projectDataPayload.clientName,
@@ -635,7 +635,7 @@ export class ProjectCreateFormComponent implements OnInit {
     if (payload) {
       this.assemblyService.updateIproperties(payload).subscribe({
         next: response => {
-          alert(response.message);
+          //alert(response.message);
           this.updateFileNames(payload);
         },
         error: error => {
@@ -652,14 +652,14 @@ export class ProjectCreateFormComponent implements OnInit {
       drawingspath: payload.drawingspath,
       partPrefix: payload.ipropertiesdetails.partPrefix,
       assemblyList: [
-        "PC0300949_01_01.iam"
+        "ABC099001_01_01.iam"
       ]
     };
 
     if (fileUpdatePayload) {
       this.assemblyService.updateFileNames(fileUpdatePayload).subscribe({
         next: response => {
-          alert(response.message);
+          //alert(response.message);
           this.updateFolderName(fileUpdatePayload);
         },
         error: error => {
@@ -673,10 +673,10 @@ export class ProjectCreateFormComponent implements OnInit {
 
   updateFolderName(payload: any) {
     if (payload) {
-      this.generateService.renameFolder('PC0300949_01_01', payload.partPrefix).subscribe({
+      this.generateService.renameFolder('ABC099001', payload.partPrefix).subscribe({
         next: (response) => {
           if (response.status === 200) {
-            alert(response.body.message);  // Success
+            //alert(response.body.message);  // Success
           }
         },
         error: (error) => {

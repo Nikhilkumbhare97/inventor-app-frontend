@@ -2,14 +2,18 @@
     <div class="hamburger-menu" (click)="toggleMenu()">&#9776;</div>
     <div class="logo-container" (click)="navigateHome()">
         <div class="logo">
-            <img src="../../../assets/logos/Auto-Designer-logo.webp" alt="AutoDesigner Logo">
+            <img src="../../../assets/logos/logo_3-removebg-preview.png" alt="AutoDesigner Logo">
         </div>
         <div class="logo-text">
-            AUTO DESIGNER
+            PARAMETRIX
         </div>
     </div>
     <div class="user-section" (click)="toggleUserMenu()">
-        <span class="user-icon">👤</span>
+        <span class="user-icon"><svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
+            </svg>
+        </span>
         <span class="username">USERNAME</span>
         <div class="user-menu" *ngIf="userMenuOpen">
             <p>Email: user@example.com</p>

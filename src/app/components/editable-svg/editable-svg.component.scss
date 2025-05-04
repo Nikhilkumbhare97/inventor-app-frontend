@@ -1,7 +1,22 @@
+// .svg-container {
+//     position: relative;
+//     display: inline-block;
+//     align-self: center;
+// }
+
+.svg-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    /* or 100vh if full screen */
+    overflow: auto;
+}
+
 .svg-container {
     position: relative;
     display: inline-block;
-    align-self: center;
 }
 
 .svg-background {
@@ -12,8 +27,8 @@
 .draggable {
     position: absolute;
     cursor: move;
-    background: rgba(255, 255, 255, 0.9);
-    border: 0.5px solid #ccc;
+    background: #d89d54(255, 255, 255, 0.9);
+    border: 0.5px solid #f4f4f4;
     padding: 3.5px;
     display: flex;
     flex-direction: column;
@@ -27,7 +42,7 @@
     width: 4rem;
     height: 1.5rem;
     background-color: green;
-    color: white;
+    color: #f4f4f4;
     //font-weight: bolder;
     //font-size: 1.25rem;
     text-align: center;
@@ -36,7 +51,7 @@
 
 .draggable input.modified {
     background-color: red;
-    color: white;
+    color: #f4f4f4;
 }
 
 .save-modified {
@@ -46,5 +61,5 @@
 
 .parameter-label {
     font-size: 0.7rem;
-    color: black;
+    color: #000000;
 }

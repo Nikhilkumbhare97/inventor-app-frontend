@@ -1,4 +1,21 @@
 <div class="tabs">
-    <button (click)="setActiveTab('users')" [class.active]="activeTab === 'users'">USERS</button>
-    <button (click)="setActiveTab('projects')" [class.active]="activeTab === 'projects'">PROJECTS</button>
+    <div class="head_1">
+        Revolutionizing Power Transformer Design with 3D Parametric Automation
+    </div>
+    <div class="head_2">
+        Error-Free, Time-Saving, and Cost-Effective Solutions Through Next-Gen Design Automation
+    </div>
+    <br>
+    <div>
+        <button (click)="setActiveTab('create-project')" [class.active]="activeTab === 'create-project'">
+            Create Project
+        </button>
+        <button (click)="setActiveTab('projects')" [class.active]="activeTab === 'projects'">
+            Projects
+        </button>
+    </div>
+</div>
+
+<div class="full-page-image">
+    <img src="../../../assets/logos/PT&7.jpeg" alt="">
 </div>

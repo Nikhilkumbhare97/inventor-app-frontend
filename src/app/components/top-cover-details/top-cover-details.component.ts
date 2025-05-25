@@ -1,6 +1,8 @@
 import {
   Component, ElementRef, EventEmitter, Input, Output, ViewChild, OnChanges, SimpleChanges,
-  OnInit
+  OnInit,
+  QueryList,
+  ViewChildren
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -28,6 +30,7 @@ interface Configuration {
 })
 export class TopCoverDetailsComponent implements OnChanges {
   @ViewChild('svgContainer', { static: false }) svgContainer!: ElementRef;
+  @ViewChildren('accordionBody') accordionBodies!: QueryList<ElementRef>;
   @Input() topCoverVisible = false;
   @Input() transformerName = '';
   @Input() isEditMode = false;
@@ -124,4 +127,12 @@ export class TopCoverDetailsComponent implements OnChanges {
     this.topCoverPayloads.emit(this.combinedData);
   }
 
+  scrollToBody(imageName: string) {
+    const bodyRef = this.accordionBodies.find(ref =>
+      ref.nativeElement.closest('.accordion-collapse')?.id === 'collapse' + imageName
+    );
+    if (bodyRef) {
+      bodyRef.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 }

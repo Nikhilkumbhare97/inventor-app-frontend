@@ -1,9 +1,32 @@
 .projects-list-container {
-    margin-top: 0.5rem;
-    padding: 16px;
+    margin: 40px auto 0 auto;
+    max-width: 96vw;
+    width: 1600px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 32px 32px 16px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .search-bar-row {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 8px;
+    }
+
+    mat-form-field {
+        width: 300px;
+        margin-bottom: 0;
+        background: none;
+        border-radius: 0;
+    }
 
     table {
         width: 100%;
+        margin-bottom: 0;
     }
 
     th.mat-header-cell,
@@ -22,5 +45,10 @@
         button {
             margin-right: 8px;
         }
+    }
+
+    mat-paginator {
+        margin-top: 8px;
+        align-self: flex-end;
     }
 }

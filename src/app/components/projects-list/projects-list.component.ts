@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from '../../models/project.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort, Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { StatusDialogComponent } from '../status-dialog/status-dialog.component';
 import { ProjectService } from '../../services/project.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-projects-list',
@@ -14,8 +17,14 @@ import { ProjectService } from '../../services/project.service';
 export class ProjectsListComponent implements OnInit {
 
   displayedColumns: string[] = ['srNo', 'projectName', 'projectNumber', 'projectId', 'clientName', 'status', 'actions'];
-  dataSource: Project[] = [];
+  dataSource: MatTableDataSource<Project> = new MatTableDataSource<Project>();
   selectedStatus: string[] = [];
+  searchKey: string = '';
+  page = 1;
+  pageSize = 10;
+  totalCount = 0;
+  sortBy = 'projectName';
+  sortDirection = 'asc';
 
   constructor(
     private router: Router,
@@ -29,25 +38,22 @@ export class ProjectsListComponent implements OnInit {
   }
 
   loadProjects() {
-    if (this.selectedStatus.length > 0) {
-      this.projectService.getProjectsByStatus(this.selectedStatus).subscribe({
-        next: (projects) => {
-          this.dataSource = projects;
-        },
-        error: (error) => {
-          this.showStatusDialog('Error', 'Failed to load projects. Please try again later.');
-        }
-      });
-    } else {
-      this.projectService.getAllProjects().subscribe({
-        next: (projects) => {
-          this.dataSource = projects;
-        },
-        error: (error) => {
-          this.showStatusDialog('Error', 'Failed to load projects. Please try again later.');
-        }
-      });
-    }
+    this.projectService.getPagedProjects(
+      this.page,
+      this.pageSize,
+      this.searchKey,
+      this.sortBy,
+      this.sortDirection,
+      this.selectedStatus
+    ).subscribe({
+      next: (res) => {
+        this.dataSource = new MatTableDataSource(res.projects);
+        this.totalCount = res.totalCount;
+      },
+      error: () => {
+        this.showStatusDialog('Error', 'Failed to load projects. Please try again later.');
+      }
+    });
   }
 
   onCopy(project: Project) {
@@ -120,6 +126,23 @@ export class ProjectsListComponent implements OnInit {
   onEdit(project: Project) {
     // Navigate to the edit component with the project ID
     this.router.navigate(['/edit-project', project.projectUniqueId]);
+  }
+
+  onPageChange(event: PageEvent) {
+    this.page = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.loadProjects();
+  }
+
+  onSortChange(sort: Sort) {
+    this.sortBy = sort.active;
+    this.sortDirection = sort.direction || 'asc';
+    this.loadProjects();
+  }
+
+  applyFilter() {
+    this.page = 1; // Reset to first page on search
+    this.loadProjects();
   }
 
 }

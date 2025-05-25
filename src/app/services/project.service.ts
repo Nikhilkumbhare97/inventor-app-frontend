@@ -53,6 +53,24 @@ export class ProjectService {
       .pipe(catchError(this.handleError)); // Handle errors
   }
 
+  getPagedProjects(
+    page: number,
+    pageSize: number,
+    search: string,
+    sortBy: string,
+    sortDirection: string,
+    status: string[]
+  ): Observable<{ projects: Project[], totalCount: number }> {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('pageSize', pageSize)
+      .set('search', search)
+      .set('sortBy', sortBy)
+      .set('sortDirection', sortDirection);
+    status.forEach(s => params = params.append('status', s));
+    return this.http.get<{ projects: Project[], totalCount: number }>(`${this.apiUrl}/paged`, { params });
+  }
+
   private handleError(error: any) {  // Centralized error handling
 
     // Return an observable with a user-facing error message

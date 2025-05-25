@@ -48,8 +48,9 @@
                         {{ imageName }}
                     </button>
                 </h2>
-                <div [id]="'collapse' + imageName" class="accordion-collapse collapse">
-                    <div class="accordion-body">
+                <div [id]="'collapse' + imageName" class="accordion-collapse collapse"
+                    (shown.bs.collapse)="scrollToBody(imageName)">
+                    <div class="accordion-body" #accordionBody>
                         <app-editable-svg [imageName]="imageName" [inputOnlyMode]="true"
                             (modifiedData)="handleModifiedData($event, imageName)">
                         </app-editable-svg>

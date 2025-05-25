@@ -5,6 +5,8 @@ import { GenerateService } from '../../services/generate.service';
 import { AssemblyService } from '../../services/assembly.service';
 import { TransformerService } from '../../services/transformer.service';
 import { TransformerConfigService } from '../../services/transformerConfig.service';
+import { MatDialog } from '@angular/material/dialog';
+import { StatusDialogComponent } from '../status-dialog/status-dialog.component';
 
 @Component({
   selector: 'app-project-create-form',
@@ -57,6 +59,7 @@ export class ProjectCreateFormComponent implements OnInit {
   conservatorIpartsIassembliesData: any = {};
   modelRepresentationData: any = {};
   projectDataPayload: any;
+  generateButtonVisible: Boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -64,7 +67,8 @@ export class ProjectCreateFormComponent implements OnInit {
     private generateService: GenerateService,
     private assemblyService: AssemblyService,
     private transformerService: TransformerService,
-    private transformerConfigService: TransformerConfigService) { }
+    private transformerConfigService: TransformerConfigService,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.transformerDetailsForm = this.fb.group({
@@ -90,6 +94,7 @@ export class ProjectCreateFormComponent implements OnInit {
   }
 
   generate(): void {
+    this.generateButtonVisible = false;
     this.generateService.createFolder('ABC099001').subscribe({
       next: (response) => {
         if (response.status === 200) {
@@ -676,8 +681,9 @@ export class ProjectCreateFormComponent implements OnInit {
       this.generateService.renameFolder('ABC099001', payload.partPrefix).subscribe({
         next: (response) => {
           if (response.status === 200) {
-            //alert(response.body.message);  // Success
+            this.showStatusDialog('Generation completed successfully.', `The folder was created with the name: "${payload.partPrefix}"`);
           }
+          this.generateButtonVisible = true;
         },
         error: (error) => {
           if (error.status === 400) {
@@ -687,6 +693,7 @@ export class ProjectCreateFormComponent implements OnInit {
           } else {
             alert('Unexpected error occurred.');
           }
+          this.generateButtonVisible = true;
         }
       });
     } else {
@@ -700,5 +707,11 @@ export class ProjectCreateFormComponent implements OnInit {
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  showStatusDialog(title: string, message: string) {
+    this.dialog.open(StatusDialogComponent, {
+      data: { title, message }
+    });
   }
 }

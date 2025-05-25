@@ -28,9 +28,11 @@
             </mat-form-field>
         </div>
         <div class="button-row">
-            <button mat-raised-button color="primary"
-                *ngIf="transformerDetailsForm.get('designType')?.value === 'Standard'"
-                (click)="generate()">Generate</button>
+            <button [disabled]="!generateButtonVisible" mat-raised-button color="primary"
+                *ngIf="transformerDetailsForm.get('designType')?.value === 'Standard'" (click)="generate()">
+                <mat-spinner *ngIf="!generateButtonVisible" diameter="20"></mat-spinner>
+                {{ generateButtonVisible ? 'Generate' : '' }}
+            </button>
             <button *ngIf="transformerDetailsForm.get('designType')?.value === 'Non-standard'" mat-raised-button
                 color="primary" (click)="ContinueTransformerDetails()"
                 [disabled]="tankSection && transformerSaveButtonVisibility">Save</button>
@@ -82,5 +84,8 @@
 
 <div class="button-gen"
     *ngIf="transformerDetailsForm.get('designType')?.value === 'Non-standard' && (tankDetailsData && lvTrunkingDetailsData && topCoverDetailsData) || (tankInventorPayload || lvTrunkingInventorPayload || topCoverInventorPayload || lvhvTurretInventorPayload || conservatorSupportInventorPayload || conservatorInventorPayload)">
-    <button mat-raised-button color="primary" (click)="generate()">Generate</button>
+    <button mat-raised-button color="primary" (click)="generate()" [disabled]="!generateButtonVisible">
+        <mat-spinner *ngIf="!generateButtonVisible" diameter="20"></mat-spinner>
+        {{ generateButtonVisible ? 'Generate' : '' }}
+    </button>
 </div>

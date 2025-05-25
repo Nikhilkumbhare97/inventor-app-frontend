@@ -1,5 +1,7 @@
 import {
-  Component, ElementRef, EventEmitter, Input, Output, ViewChild, OnChanges, SimpleChanges
+  Component, ElementRef, EventEmitter, Input, Output, ViewChild, OnChanges, SimpleChanges,
+  QueryList,
+  ViewChildren
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -27,6 +29,7 @@ interface Configuration {
 })
 export class LvTrunkingDetailsComponent implements OnChanges {
   @ViewChild('svgContainer', { static: false }) svgContainer!: ElementRef;
+  @ViewChildren('accordionBody') accordionBodies!: QueryList<ElementRef>;
   @Input() lvTrunkingVisible = false;
   @Input() lvTrunkingDetailsData: any = {};
   @Input() isEditMode = false;
@@ -122,5 +125,14 @@ export class LvTrunkingDetailsComponent implements OnChanges {
 
     // Emit the combined data
     this.lvTrunckingPayloads.emit(this.combinedData);
+  }
+
+  scrollToBody(imageName: string) {
+    const bodyRef = this.accordionBodies.find(ref =>
+      ref.nativeElement.closest('.accordion-collapse')?.id === 'collapse' + imageName
+    );
+    if (bodyRef) {
+      bodyRef.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }

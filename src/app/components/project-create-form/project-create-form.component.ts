@@ -545,7 +545,7 @@ export class ProjectCreateFormComponent implements OnInit {
       ...(this.conservatorInventorPayload || [])
     ];
 
-    const partFilePath = 'D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\ABC099001\\MODEL\\ABC099001_03_01.ipt';
+    const partFilePath = 'D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\ABC099001\\MODEL\\ABC099001_03_01.ipt';
     //const partFilePath = 'D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\ABC099001\\MODEL\\ABC099001_03_01.ipt';
     const parameters = parametersPayload;
 
@@ -623,7 +623,7 @@ export class ProjectCreateFormComponent implements OnInit {
   // Update iproperties method
   updateIproperties() {
     const payload = {
-      drawingspath: "D:\\Project_task\\Projects\\TRANSFORMER\\WIP\\ABC099001\\MODEL",
+      drawingspath: "D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\ABC099001\\MODEL",
       //drawingspath: "D:\\PROJECTS\\VECTOR\\3D Modelling\\TRANSFORMER\\WIP\\ABC099001_01_01\\MODEL",
       ipropertiesdetails: {
         "originalPrefix": "ABC099001",

@@ -22,6 +22,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 // components
 import { LoginComponent } from './components/login/login.component';
@@ -77,7 +80,10 @@ import { ConservatorDetailsComponent } from './components/conservator-details/co
     HttpClientModule,
     FormsModule,
     DragDropModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },

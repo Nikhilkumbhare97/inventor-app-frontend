@@ -8,17 +8,14 @@
             PARAMETRIX
         </div>
     </div>
-    <div class="user-section" (click)="toggleUserMenu()">
-        <span class="user-icon"><svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
-            </svg>
+    <div class="user-section" #userSection (click)="toggleUserMenu()">
+        <span class="user-icon"><img src="../../../assets/user-images/21788.png" alt="">
         </span>
-        <span class="username">USERNAME</span>
+        <span class="username">Wade Wilson</span>
         <div class="user-menu" *ngIf="userMenuOpen">
-            <p>Email: user@example.com</p>
-            <button>Change Password</button>
-            <button>Sign Out</button>
+            <p>Email: deadpool@gmail.com</p>
+            <button (click)="navigateToChangePassword()">Change Password</button>
+            <button (click)="signOut()">Sign Out</button>
         </div>
     </div>
 </div>

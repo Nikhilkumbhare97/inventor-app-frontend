@@ -6,4 +6,6 @@ export interface Project {
     projectNumber: string;
     clientName: string;
     status: string;
+    isCopied?: boolean;
+    copiedUniqueId?: number;
 }

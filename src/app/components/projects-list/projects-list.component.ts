@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Project } from '../../models/project.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -25,6 +25,7 @@ export class ProjectsListComponent implements OnInit {
   totalCount = 0;
   sortBy = 'projectName';
   sortDirection = 'asc';
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private router: Router,
@@ -139,8 +140,21 @@ export class ProjectsListComponent implements OnInit {
   }
 
   onSortChange(sort: Sort) {
-    this.sortBy = sort.active;
-    this.sortDirection = sort.direction || 'asc';
+    if (sort.direction) {
+      this.sortBy = sort.active;
+      this.sortDirection = sort.direction;
+    } else {
+      this.sortBy = 'projectName';
+      this.sortDirection = 'asc';
+
+      setTimeout(() => {
+        if (this.sort) {
+          this.sort.active = this.sortBy;
+          this.sort.direction = this.sortDirection as 'asc' | 'desc';
+        }
+      }, 0);
+    }
+
     this.loadProjects();
   }
 

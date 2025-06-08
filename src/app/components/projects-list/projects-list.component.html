@@ -12,7 +12,8 @@
         </mat-form-field>
     </div>
 
-    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange($event)" class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange($event)"
+        matSortActive="projectName" matSortDirection="asc" matSortDisableClear="true" class="mat-elevation-z8">
 
         <!-- Sr No Column -->
         <ng-container matColumnDef="srNo">
